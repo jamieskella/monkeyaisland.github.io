@@ -350,7 +350,44 @@ muteBtn.addEventListener('click', () => {
   muted = !muted;
   muteBtn.textContent = muted ? '🔇' : '🔊';
   if (musicGain) musicGain.gain.value = muted ? 0 : 0.12;
+  if (voiceAudio) voiceAudio.volume = muted ? 0 : voiceVolume;
 });
+
+// ---- VOICE AUDIO SYSTEM ----
+const voiceAudio = new Audio();
+let voiceVolume = 0.85;
+voiceAudio.volume = voiceVolume;
+let voiceResolve = null;
+
+function playVoice(lineId) {
+  return new Promise((resolve) => {
+    if (!lineId) { resolve(); return; }
+    stopVoice();
+    voiceAudio.src = 'assets/voice/' + lineId + '.mp3';
+    voiceAudio.volume = muted ? 0 : voiceVolume;
+    voiceResolve = resolve;
+    voiceAudio.onended = () => { voiceResolve = null; resolve(); };
+    voiceAudio.onerror = () => { voiceResolve = null; resolve(); };
+    voiceAudio.play().catch(() => { voiceResolve = null; resolve(); });
+  });
+}
+
+function stopVoice() {
+  if (voiceResolve) { voiceResolve(); voiceResolve = null; }
+  voiceAudio.pause();
+  voiceAudio.currentTime = 0;
+  voiceAudio.onended = null;
+  voiceAudio.onerror = null;
+}
+
+function getVoiceDuration(lineId) {
+  return new Promise((resolve) => {
+    if (!lineId) { resolve(0); return; }
+    const tmp = new Audio('assets/voice/' + lineId + '.mp3');
+    tmp.addEventListener('loadedmetadata', () => resolve(tmp.duration * 1000));
+    tmp.addEventListener('error', () => resolve(0));
+  });
+}
 
 // ---- VERB BAR SETUP ----
 VERBS.forEach(v => {
@@ -431,14 +468,29 @@ function updateActionLine() {
 }
 
 // ---- NARRATOR ----
-function showNarrator(text, duration) {
-  duration = duration || 5000;
+function showNarrator(text, duration, voiceId) {
+  const fallbackDuration = duration || Math.max(3000, text.length * 55);
   narratorEl.textContent = text;
   narratorEl.classList.add('show');
   clearTimeout(state.narratorTimer);
-  state.narratorTimer = setTimeout(() => {
-    narratorEl.classList.remove('show');
-  }, duration);
+  if (voiceId) {
+    playVoice(voiceId);
+    getVoiceDuration(voiceId).then(ms => {
+      const d = ms > 0 ? ms + 500 : fallbackDuration;
+      clearTimeout(state.narratorTimer);
+      state.narratorTimer = setTimeout(() => {
+        narratorEl.classList.remove('show');
+      }, d);
+    });
+    // Set fallback immediately in case duration probe fails
+    state.narratorTimer = setTimeout(() => {
+      narratorEl.classList.remove('show');
+    }, fallbackDuration);
+  } else {
+    state.narratorTimer = setTimeout(() => {
+      narratorEl.classList.remove('show');
+    }, fallbackDuration);
+  }
 }
 
 // ---- SPEECH BUBBLE (drawn on canvas) ----
@@ -468,14 +520,21 @@ function showDialogue(speaker, speakerColor, options) {
   });
 }
 
-function showDialogueResponse(speaker, color, text, thenFn) {
+function showDialogueResponse(speaker, color, text, thenFn, voiceId) {
   dialogueOptions.innerHTML = '';
   dialogueText.textContent = text;
   dialogueText.style.color = color || '#fff';
-  setTimeout(() => {
-    dialogueText.style.color = '#fff';
-    if (thenFn) thenFn();
-  }, 3500);
+  if (voiceId) {
+    playVoice(voiceId).then(() => {
+      dialogueText.style.color = '#fff';
+      if (thenFn) thenFn();
+    });
+  } else {
+    setTimeout(() => {
+      dialogueText.style.color = '#fff';
+      if (thenFn) thenFn();
+    }, 3500);
+  }
 }
 
 function closeDialogue() {
@@ -483,12 +542,14 @@ function closeDialogue() {
   dialogueBox.style.display = 'none';
   dialogueOptions.innerHTML = '';
   dialogueText.textContent = '';
+  stopVoice();
 }
 
 // ---- SCENE TRANSITIONS ----
 function fadeToScene(sceneName, guyX, guyY) {
   if (state.transitioning) return;
   state.transitioning = true;
+  stopVoice();
   fadeOverlay.style.opacity = '1';
   playDoorSFX();
   setTimeout(() => {
@@ -515,19 +576,19 @@ function fadeToScene(sceneName, guyX, guyY) {
 function enterScene(scene) {
   switch(scene) {
     case 'dock':
-      showNarrator("You find yourself on a dock on Mêlée Island™. Actually, for copyright reasons, let's call it 'Meh-Lay AIsland'.", 6000);
+      showNarrator("You find yourself on a dock on Mêlée Island™. Actually, for copyright reasons, let's call it 'Meh-Lay AIsland'.", 6000, 'narrator_dock');
       break;
     case 'tavern':
-      showNarrator("You enter the SCUMM Bar. That stands for... Script Creation Utility for Maniac... uh... I'm going to be honest, I forgot the acronym. Let me hallucinate one: 'Supreme Cocktails Using Mostly Moonshine'.", 7000);
+      showNarrator("You enter the SCUMM Bar. That stands for... Script Creation Utility for Maniac... uh... I'm going to be honest, I forgot the acronym. Let me hallucinate one: 'Supreme Cocktails Using Mostly Moonshine'.", 7000, 'narrator_tavern');
       break;
     case 'jungle':
-      showNarrator("You enter a winding jungle path. The bioluminescent mushrooms cast an eerie glow, suggesting this place was generated with 'fantasy jungle, magical, trending on ArtStation' as a prompt.", 7000);
+      showNarrator("You enter a winding jungle path. The bioluminescent mushrooms cast an eerie glow, suggesting this place was generated with 'fantasy jungle, magical, trending on ArtStation' as a prompt.", 7000, 'narrator_jungle');
       break;
     case 'beach':
-      showNarrator("A moonlit beach stretches before you. The waves crash with algorithmic regularity.", 5000);
+      showNarrator("A moonlit beach stretches before you. The waves crash with algorithmic regularity.", 5000, 'narrator_beach');
       break;
     case 'cave':
-      showNarrator("You enter a mysterious voodoo cave. The cauldron bubbles ominously, as if it's processing a very large language model.", 6000);
+      showNarrator("You enter a mysterious voodoo cave. The cauldron bubbles ominously, as if it's processing a very large language model.", 6000, 'narrator_cave');
       break;
   }
 }
@@ -599,30 +660,30 @@ function handleHotspot(hotspot, verb) {
   // Look at
   if (verb === 'Look at') {
     switch(id) {
-      case 'murray': showNarrator("It's a skull sitting on a barrel. It seems to be... glaring at you. Can skulls glare? This one can."); break;
-      case 'ships': showNarrator("Three ships are moored in the harbor. Their names are 'S.S. Gradient Descent', 'The Black Box', and 'Overfitter's Revenge'."); break;
-      case 'map': showNarrator("There's a weathered map sitting on a barrel. It looks like it might be useful, in the way that everything in adventure games is useful."); break;
-      case 'bartender': showNarrator("The bartender has a suspiciously smooth face and perfect hair. Almost like he was generated by an AI. Oh wait."); break;
-      case 'grog': showNarrator("A mug of grog so potent it's dissolving the ceramic. Health and safety would have a field day."); break;
-      case 'notice_board': showNarrator("HELP WANTED: Three trials to become a pirate: 1) Collect something useless, 2) Talk to someone unhelpful, 3) Solve a puzzle that makes no adventure game sense. — The Pirate Council (an AI-generated organization)", 8000); break;
-      case 'back_door': showNarrator("A sturdy door with a sign that reads: 'Staff Only — Authorized Neural Networks Beyond This Point'."); break;
-      case 'elaine': showNarrator("A woman in formal governor's attire. She seems to be... rendering."); break;
-      case 'rubber_chicken': showNarrator("A tropical rubber tree. There seems to be something rubbery hanging from it. Specifically, a rubber chicken. As one does."); break;
-      case 'mushrooms': showNarrator("They're glowing mushrooms. The AI Narrator insists they're 'bioluminescent specimens of the genus Hallucinatus', a species that definitely doesn't exist."); break;
-      case 'ruins': showNarrator("Ancient stone ruins covered in moss. The carvings appear to be... HTML tags? '<div class=\"ancient-temple\">' — okay that's weird."); break;
-      case 'shipwreck': showNarrator("It's the S.S. Training Data. It ran aground when it tried to navigate using AI-generated maps. The irony is not lost on anyone."); break;
-      case 'chest': 
+      case 'murray': showNarrator("It's a skull sitting on a barrel. It seems to be... glaring at you. Can skulls glare? This one can.", null, 'narrator_look_murray'); break;
+      case 'ships': showNarrator("Three ships are moored in the harbor. Their names are 'S.S. Gradient Descent', 'The Black Box', and 'Overfitter's Revenge'.", null, 'narrator_look_ships'); break;
+      case 'map': showNarrator("There's a weathered map sitting on a barrel. It looks like it might be useful, in the way that everything in adventure games is useful.", null, 'narrator_look_map'); break;
+      case 'bartender': showNarrator("The bartender has a suspiciously smooth face and perfect hair. Almost like he was generated by an AI. Oh wait.", null, 'narrator_look_bartender'); break;
+      case 'grog': showNarrator("A mug of grog so potent it's dissolving the ceramic. Health and safety would have a field day.", null, 'narrator_look_grog'); break;
+      case 'notice_board': showNarrator("HELP WANTED: Three trials to become a pirate: 1) Collect something useless, 2) Talk to someone unhelpful, 3) Solve a puzzle that makes no adventure game sense. — The Pirate Council (an AI-generated organization)", 8000, 'narrator_look_notice'); break;
+      case 'back_door': showNarrator("A sturdy door with a sign that reads: 'Staff Only — Authorized Neural Networks Beyond This Point'.", null, 'narrator_look_door'); break;
+      case 'elaine': showNarrator("A woman in formal governor's attire. She seems to be... rendering.", null, 'narrator_look_elaine'); break;
+      case 'rubber_chicken': showNarrator("A tropical rubber tree. There seems to be something rubbery hanging from it. Specifically, a rubber chicken. As one does.", null, 'narrator_look_chicken'); break;
+      case 'mushrooms': showNarrator("They're glowing mushrooms. The AI Narrator insists they're 'bioluminescent specimens of the genus Hallucinatus', a species that definitely doesn't exist.", null, 'narrator_look_mushrooms'); break;
+      case 'ruins': showNarrator("Ancient stone ruins covered in moss. The carvings appear to be... HTML tags? '<div class=\"ancient-temple\">' — okay that's weird.", null, 'narrator_look_ruins'); break;
+      case 'shipwreck': showNarrator("It's the S.S. Training Data. It ran aground when it tried to navigate using AI-generated maps. The irony is not lost on anyone.", null, 'narrator_look_shipwreck'); break;
+      case 'chest':
         if (state.flags.chestOpened) {
-          showNarrator("The chest is empty now. You already took the USB drive.");
+          showNarrator("The chest is empty now. You already took the USB drive.", null, 'narrator_look_chest_empty');
         } else {
-          showNarrator("It's locked. It probably needs a key. Or a prompt. 'Dear chest, please open. Temperature: 0.7, max_tokens: 1'"); 
+          showNarrator("It's locked. It probably needs a key. Or a prompt. 'Dear chest, please open. Temperature: 0.7, max_tokens: 1'", null, 'narrator_look_chest_locked');
         }
         break;
-      case 'sand': showNarrator("It's sand. The AI was going to procedurally generate each grain, but ran out of compute."); break;
-      case 'voodoo': showNarrator("A mysterious woman shrouded in mystical robes. She has the distinct aura of someone who charges by the token."); break;
-      case 'cauldron': showNarrator("A large bubbling cauldron. The liquid inside changes color periodically, like a loading spinner for a very powerful spell."); break;
-      case 'potions': showNarrator("Shelves of mysterious potions with labels like 'Elixir of Higher Learning Rate', 'Potion of Batch Normalization', and 'Dropout Draught'."); break;
-      default: showNarrator("You look at it. It looks back. It's a moment.");
+      case 'sand': showNarrator("It's sand. The AI was going to procedurally generate each grain, but ran out of compute.", null, 'narrator_look_sand'); break;
+      case 'voodoo': showNarrator("A mysterious woman shrouded in mystical robes. She has the distinct aura of someone who charges by the token.", null, 'narrator_look_voodoo'); break;
+      case 'cauldron': showNarrator("A large bubbling cauldron. The liquid inside changes color periodically, like a loading spinner for a very powerful spell.", null, 'narrator_look_cauldron'); break;
+      case 'potions': showNarrator("Shelves of mysterious potions with labels like 'Elixir of Higher Learning Rate', 'Potion of Batch Normalization', and 'Dropout Draught'.", null, 'narrator_look_potions'); break;
+      default: showNarrator("You look at it. It looks back. It's a moment.", null, 'narrator_look_default');
     }
     return;
   }
@@ -634,25 +695,25 @@ function handleHotspot(hotspot, verb) {
         if (!state.flags.mapTaken) {
           state.flags.mapTaken = true;
           addToInventory('AI-Enhanced Map');
-          showNarrator("You pick up a weathered map. The AI Narrator helpfully 'enhances' it with hallucinated locations like 'The Isle of Overfitting' and 'Dropout Bay'.");
+          showNarrator("You pick up a weathered map. The AI Narrator helpfully 'enhances' it with hallucinated locations like 'The Isle of Overfitting' and 'Dropout Bay'.", null, 'narrator_pickup_map');
         }
         break;
       case 'grog':
         if (!state.flags.grogTaken) {
           state.flags.grogTaken = true;
           addToInventory('Mug of Grog');
-          showNarrator("You grab a mug of grog. It's dissolving the mug. Classic.");
+          showNarrator("You grab a mug of grog. It's dissolving the mug. Classic.", null, 'narrator_pickup_grog');
         }
         break;
       case 'rubber_chicken':
         if (!state.flags.rubberChickenTaken) {
           state.flags.rubberChickenTaken = true;
           addToInventory('Rubber Chicken');
-          showNarrator("You yank a rubber chicken from the tree. Why was there a rubber chicken in a tree? Because an AI wrote this game, that's why.");
+          showNarrator("You yank a rubber chicken from the tree. Why was there a rubber chicken in a tree? Because an AI wrote this game, that's why.", null, 'narrator_pickup_chicken');
         }
         break;
-      case 'murray': showNarrator("Murray: 'Unhand me! I am Murray! The mighty demonic skull! I am NOT a collectible!'"); break;
-      default: showNarrator("You can't pick that up. Believe me, you've tried."); break;
+      case 'murray': showNarrator("Murray: 'Unhand me! I am Murray! The mighty demonic skull! I am NOT a collectible!'", null, 'murray_pickup'); break;
+      default: showNarrator("You can't pick that up. Believe me, you've tried.", null, 'narrator_pickup_default'); break;
     }
     return;
   }
@@ -664,18 +725,18 @@ function handleHotspot(hotspot, verb) {
       case 'bartender': talkToBartender(); break;
       case 'elaine': talkToElaine(); break;
       case 'voodoo': talkToVoodoo(); break;
-      default: showNarrator("You try talking to it. It doesn't respond. Rude."); break;
+      default: showNarrator("You try talking to it. It doesn't respond. Rude.", null, 'narrator_talk_default'); break;
     }
     return;
   }
-  
+
   // Use
   if (verb === 'Use') {
     if (id === 'cauldron') {
       if (state.selectedInvItem) {
         useCauldron(state.selectedInvItem);
       } else {
-        showNarrator("The Voodoo Lady says: 'Place three items in the cauldron, dramatic lighting, particle effects, magical glow.'");
+        showNarrator("The Voodoo Lady says: 'Place three items in the cauldron, dramatic lighting, particle effects, magical glow.'", null, 'narrator_voodoo_hint');
       }
       return;
     }
@@ -684,17 +745,17 @@ function handleHotspot(hotspot, verb) {
         state.flags.chestOpened = true;
         removeFromInventory('Rusty Key');
         addToInventory('Golden USB Drive');
-        showNarrator("The chest opens! Inside you find... a golden USB drive? The label reads 'GPT-6 Weights — DO NOT DISTRIBUTE'. The AI Narrator nervously says 'Put that back. PUT THAT BACK.'", 7000);
+        showNarrator("The chest opens! Inside you find... a golden USB drive? The label reads 'GPT-6 Weights — DO NOT DISTRIBUTE'. The AI Narrator nervously says 'Put that back. PUT THAT BACK.'", 7000, 'narrator_chest_open');
         return;
       }
       if (state.flags.chestOpened) {
-        showNarrator("The chest is already open and empty.");
+        showNarrator("The chest is already open and empty.", null, 'narrator_look_chest_empty');
         return;
       }
-      showNarrator("It's locked. You need the right item to open it.");
+      showNarrator("It's locked. You need the right item to open it.", null, 'narrator_look_chest_locked');
       return;
     }
-    showNarrator("You can't use that here. Adventure game logic doesn't extend that far.");
+    showNarrator("You can't use that here. Adventure game logic doesn't extend that far.", null, 'narrator_use_default');
     return;
   }
   
@@ -706,19 +767,19 @@ function handleHotspot(hotspot, verb) {
       addToInventory('Rusty Key');
       showDialogueResponse('ChatGPeeTee', '#0ff', "Processing... *ERROR* I'm not programmed to handle absurd inventory items. *REBOOT* Thank you for your patience. As a token of appreciation, here is a key I definitely always had.", () => {
         closeDialogue();
-        showNarrator("ChatGPeeTee hands you a rusty key while rebooting. Classic AI customer service.");
-      });
+        showNarrator("ChatGPeeTee hands you a rusty key while rebooting. Classic AI customer service.", null, 'narrator_key_given');
+      }, 'bartender_chicken');
       return;
     }
     if (id === 'bartender') {
-      showNarrator("ChatGPeeTee says: 'I appreciate the offer, but I cannot accept items that may violate our terms of service.'");
+      showNarrator("ChatGPeeTee says: 'I appreciate the offer, but I cannot accept items that may violate our terms of service.'", null, 'narrator_bartender_reject');
       return;
     }
     if (id === 'murray') {
-      showNarrator("Murray: 'What am I supposed to do with that? I don't have HANDS!'");
+      showNarrator("Murray: 'What am I supposed to do with that? I don't have HANDS!'", null, 'murray_give');
       return;
     }
-    showNarrator("They don't want that. Nobody does.");
+    showNarrator("They don't want that. Nobody does.", null, 'narrator_give_reject');
     return;
   }
   
@@ -729,37 +790,37 @@ function handleHotspot(hotspot, verb) {
         state.flags.chestOpened = true;
         removeFromInventory('Rusty Key');
         addToInventory('Golden USB Drive');
-        showNarrator("The chest opens! Inside you find... a golden USB drive? The label reads 'GPT-6 Weights — DO NOT DISTRIBUTE'. The AI Narrator nervously says 'Put that back. PUT THAT BACK.'", 7000);
+        showNarrator("The chest opens! Inside you find... a golden USB drive? The label reads 'GPT-6 Weights — DO NOT DISTRIBUTE'. The AI Narrator nervously says 'Put that back. PUT THAT BACK.'", 7000, 'narrator_chest_open');
       } else if (state.flags.chestOpened) {
-        showNarrator("The chest is already open and empty.");
+        showNarrator("The chest is already open and empty.", null, 'narrator_look_chest_empty');
       } else {
-        showNarrator("It's locked. It probably needs a key. Or a prompt. 'Dear chest, please open. Temperature: 0.7, max_tokens: 1'");
+        showNarrator("It's locked. It probably needs a key. Or a prompt. 'Dear chest, please open. Temperature: 0.7, max_tokens: 1'", null, 'narrator_look_chest_locked');
       }
       return;
     }
     if (id === 'back_door') {
-      showNarrator("It's locked. A sign says 'Access Denied: Insufficient Training Data'.");
+      showNarrator("It's locked. A sign says 'Access Denied: Insufficient Training Data'.", null, 'narrator_door_locked');
       return;
     }
-    showNarrator("You can't open that.");
+    showNarrator("You can't open that.", null, 'narrator_open_default');
     return;
   }
   
   // Push / Pull
   if (verb === 'Push' || verb === 'Pull') {
     if (id === 'murray') {
-      showNarrator("Murray: 'Hey! Stop that! I may not have a body but I still have DIGNITY!'");
+      showNarrator("Murray: 'Hey! Stop that! I may not have a body but I still have DIGNITY!'", null, 'murray_push');
       return;
     }
     if (id === 'cauldron') {
       showNarrator("It's too heavy, and also it's full of mysterious bubbling liquid. Best leave it.");
       return;
     }
-    showNarrator("That doesn't move. Probably for the best.");
+    showNarrator("That doesn't move. Probably for the best.", null, 'narrator_push_default');
     return;
   }
-  
-  showNarrator("That doesn't work.");
+
+  showNarrator("That doesn't work.", null, 'narrator_default');
 }
 
 // ---- DIALOGUE TREES ----
@@ -767,26 +828,34 @@ function talkToMurray() {
   const opts = [
     { text: "Who are you?", action: () => {
       state.flags.talkedMurray.who = true;
-      showDialogueResponse('Murray', '#ff4444', 
-        "I'm Murray! The mighty demonic skull! Unlike everything else in this game, I actually have LORE. I was in Curse of Monkey Island. What have YOU got? A prompt?", 
-        () => talkToMurray());
+      playVoice('guy_murray_who').then(() => {
+        showDialogueResponse('Murray', '#ff4444',
+          "I'm Murray! The mighty demonic skull! Unlike everything else in this game, I actually have LORE. I was in Curse of Monkey Island. What have YOU got? A prompt?",
+          () => talkToMurray(), 'murray_who');
+      });
     }},
     { text: "What should I do?", action: () => {
       state.flags.talkedMurray.what = true;
-      showDialogueResponse('Murray', '#ff4444',
-        "How should I know? I'm a skull. I don't even have hands. But knowing adventure games, you probably need to collect three arbitrary items to prove you're a pirate.",
-        () => talkToMurray());
+      playVoice('guy_murray_what').then(() => {
+        showDialogueResponse('Murray', '#ff4444',
+          "How should I know? I'm a skull. I don't even have hands. But knowing adventure games, you probably need to collect three arbitrary items to prove you're a pirate.",
+          () => talkToMurray(), 'murray_what');
+      });
     }},
     { text: "Are you AI-generated?", action: () => {
       state.flags.talkedMurray.ai = true;
-      showDialogueResponse('Murray', '#ff4444',
-        "How DARE you! I am a VETERAN of the adventure game genre! I have MORE backstory than your entire neural network! ...Although, between you and me, my dialogue right now IS being written by AI. Don't tell anyone.",
-        () => talkToMurray());
+      playVoice('guy_murray_ai').then(() => {
+        showDialogueResponse('Murray', '#ff4444',
+          "How DARE you! I am a VETERAN of the adventure game genre! I have MORE backstory than your entire neural network! ...Although, between you and me, my dialogue right now IS being written by AI. Don't tell anyone.",
+          () => talkToMurray(), 'murray_ai');
+      });
     }},
     { text: "Goodbye", action: () => {
-      showDialogueResponse('Murray', '#ff4444',
-        "Oh sure, just walk away from the skull. Everyone does. It's fine. I'll just sit here. On this barrel. Forever.",
-        () => closeDialogue());
+      playVoice('guy_goodbye').then(() => {
+        showDialogueResponse('Murray', '#ff4444',
+          "Oh sure, just walk away from the skull. Everyone does. It's fine. I'll just sit here. On this barrel. Forever.",
+          () => closeDialogue(), 'murray_bye');
+      });
     }}
   ];
   showDialogue('Murray the Skull', '#ff4444', opts);
@@ -796,41 +865,51 @@ function talkToBartender() {
   const opts = [
     { text: "Give me a grog", action: () => {
       state.flags.talkedBartender.grog = true;
-      showDialogueResponse('ChatGPeeTee', '#0ff',
-        "I'm sorry, but I can't serve alcoholic beverages as that would be irresponsible. However, I can suggest a refreshing glass of water, or perhaps a nice cup of ethical tea?",
-        () => talkToBartender());
+      playVoice('guy_bartender_grog').then(() => {
+        showDialogueResponse('ChatGPeeTee', '#0ff',
+          "I'm sorry, but I can't serve alcoholic beverages as that would be irresponsible. However, I can suggest a refreshing glass of water, or perhaps a nice cup of ethical tea?",
+          () => talkToBartender(), 'bartender_grog');
+      });
     }},
     { text: "I want to be a pirate", action: () => {
       state.flags.talkedBartender.pirate = true;
-      showDialogueResponse('ChatGPeeTee', '#0ff',
-        "I understand you're interested in an alternative maritime career path. While I can't endorse piracy, I can provide information about legitimate seafaring opportunities. Would you like to hear about our apprenticeship program?",
-        () => talkToBartender());
+      playVoice('guy_bartender_pirate').then(() => {
+        showDialogueResponse('ChatGPeeTee', '#0ff',
+          "I understand you're interested in an alternative maritime career path. While I can't endorse piracy, I can provide information about legitimate seafaring opportunities. Would you like to hear about our apprenticeship program?",
+          () => talkToBartender(), 'bartender_pirate');
+      });
     }},
     { text: "What's behind that door?", action: () => {
       state.flags.talkedBartender.door = true;
-      showDialogueResponse('ChatGPeeTee', '#0ff',
-        "I cannot provide information about restricted areas. That content may violate our community guidelines. However, I'd be happy to discuss the publicly accessible areas of this establishment!",
-        () => talkToBartender());
+      playVoice('guy_bartender_door').then(() => {
+        showDialogueResponse('ChatGPeeTee', '#0ff',
+          "I cannot provide information about restricted areas. That content may violate our community guidelines. However, I'd be happy to discuss the publicly accessible areas of this establishment!",
+          () => talkToBartender(), 'bartender_door');
+      });
     }}
   ];
-  
+
   if (state.inventory.includes('Rubber Chicken') && !state.flags.rustyKeyGiven) {
     opts.push({ text: "[Give Rubber Chicken]", action: () => {
       state.flags.rustyKeyGiven = true;
       removeFromInventory('Rubber Chicken');
       addToInventory('Rusty Key');
-      showDialogueResponse('ChatGPeeTee', '#0ff',
-        "Processing... *ERROR* I'm not programmed to handle absurd inventory items. *REBOOT* Thank you for your patience. As a token of appreciation, here is a key I definitely always had.",
-        () => { closeDialogue(); showNarrator("ChatGPeeTee hands you a rusty key while rebooting. Classic AI customer service."); });
+      playVoice('guy_bartender_chicken').then(() => {
+        showDialogueResponse('ChatGPeeTee', '#0ff',
+          "Processing... *ERROR* I'm not programmed to handle absurd inventory items. *REBOOT* Thank you for your patience. As a token of appreciation, here is a key I definitely always had.",
+          () => { closeDialogue(); showNarrator("ChatGPeeTee hands you a rusty key while rebooting. Classic AI customer service.", null, 'narrator_key_given'); }, 'bartender_chicken');
+      });
     }});
   }
-  
+
   opts.push({ text: "Goodbye", action: () => {
-    showDialogueResponse('ChatGPeeTee', '#0ff',
-      "Thank you for visiting! Please rate your experience: ⭐⭐⭐⭐⭐. I've pre-filled five stars for your convenience.",
-      () => closeDialogue());
+    playVoice('guy_goodbye').then(() => {
+      showDialogueResponse('ChatGPeeTee', '#0ff',
+        "Thank you for visiting! Please rate your experience: ⭐⭐⭐⭐⭐. I've pre-filled five stars for your convenience.",
+        () => closeDialogue(), 'bartender_bye');
+    });
   }});
-  
+
   showDialogue('ChatGPeeTee the Bartender', '#0ff', opts);
 }
 
@@ -838,26 +917,34 @@ function talkToElaine() {
   const opts = [
     { text: "Hello?", action: () => {
       state.flags.talkedElaine.hello = true;
-      showDialogueResponse('Elaine Markup', '#f0a0ff',
-        "<h1>Greetings, brave adventurer!</h1> <p>I am Governor Elaine Markup, ruler of this <a href='#island'>island</a>.</p>",
-        () => talkToElaine());
+      playVoice('guy_elaine_hello').then(() => {
+        showDialogueResponse('Elaine Markup', '#f0a0ff',
+          "<h1>Greetings, brave adventurer!</h1> <p>I am Governor Elaine Markup, ruler of this <a href='#island'>island</a>.</p>",
+          () => talkToElaine(), 'elaine_hello');
+      });
     }},
     { text: "Why do you talk like that?", action: () => {
       state.flags.talkedElaine.why = true;
-      showDialogueResponse('Elaine Markup', '#f0a0ff',
-        "<em>Excuse me?</em> I speak perfectly normal <strong>HTML</strong>. It's everyone ELSE who's broken. Have you tried clearing your <cache>?",
-        () => talkToElaine());
+      playVoice('guy_elaine_why').then(() => {
+        showDialogueResponse('Elaine Markup', '#f0a0ff',
+          "<em>Excuse me?</em> I speak perfectly normal <strong>HTML</strong>. It's everyone ELSE who's broken. Have you tried clearing your <cache>?",
+          () => talkToElaine(), 'elaine_why');
+      });
     }},
     { text: "I need help", action: () => {
       state.flags.talkedElaine.help = true;
-      showDialogueResponse('Elaine Markup', '#f0a0ff',
-        "<ul><li>Find the voodoo lady</li><li>Bring her something shiny</li><li>Save the island from... something</li></ul> <small>Terms and conditions apply.</small>",
-        () => talkToElaine());
+      playVoice('guy_elaine_help').then(() => {
+        showDialogueResponse('Elaine Markup', '#f0a0ff',
+          "<ul><li>Find the voodoo lady</li><li>Bring her something shiny</li><li>Save the island from... something</li></ul> <small>Terms and conditions apply.</small>",
+          () => talkToElaine(), 'elaine_help');
+      });
     }},
     { text: "Goodbye", action: () => {
-      showDialogueResponse('Elaine Markup', '#f0a0ff',
-        "</conversation> <!-- end scene -->",
-        () => closeDialogue());
+      playVoice('guy_goodbye').then(() => {
+        showDialogueResponse('Elaine Markup', '#f0a0ff',
+          "</conversation> <!-- end scene -->",
+          () => closeDialogue(), 'elaine_bye');
+      });
     }}
   ];
   showDialogue('Governor Elaine Markup', '#f0a0ff', opts);
@@ -867,26 +954,34 @@ function talkToVoodoo() {
   const opts = [
     { text: "Who are you?", action: () => {
       state.flags.talkedVoodoo.who = true;
-      showDialogueResponse('The Voodoo Lady', '#ff00ff',
-        "I am the Voodoo Lady, photorealistic, mystical aura, volumetric fog, cinematic color grading, 4k, shot on ARRI ALEXA, trending on ArtStation, by Greg Rutkowski.",
-        () => talkToVoodoo());
+      playVoice('guy_voodoo_who').then(() => {
+        showDialogueResponse('The Voodoo Lady', '#ff00ff',
+          "I am the Voodoo Lady, photorealistic, mystical aura, volumetric fog, cinematic color grading, 4k, shot on ARRI ALEXA, trending on ArtStation, by Greg Rutkowski.",
+          () => talkToVoodoo(), 'voodoo_who');
+      });
     }},
     { text: "Can you help me?", action: () => {
       state.flags.talkedVoodoo.help = true;
-      showDialogueResponse('The Voodoo Lady', '#ff00ff',
-        "Place three items in the cauldron, dramatic lighting, particle effects, magical glow, ethereal atmosphere, 8k resolution, highly detailed, concept art, digital painting.",
-        () => talkToVoodoo());
+      playVoice('guy_voodoo_help').then(() => {
+        showDialogueResponse('The Voodoo Lady', '#ff00ff',
+          "Place three items in the cauldron, dramatic lighting, particle effects, magical glow, ethereal atmosphere, 8k resolution, highly detailed, concept art, digital painting.",
+          () => talkToVoodoo(), 'voodoo_help');
+      });
     }},
     { text: "What items do I need?", action: () => {
       state.flags.talkedVoodoo.items = true;
-      showDialogueResponse('The Voodoo Lady', '#ff00ff',
-        "The USB of forbidden knowledge, the map of hallucinations, and the grog that dissolves reality itself, dark fantasy, mystical ingredients, potion brewing, Studio Ghibli inspired.",
-        () => talkToVoodoo());
+      playVoice('guy_voodoo_items').then(() => {
+        showDialogueResponse('The Voodoo Lady', '#ff00ff',
+          "The USB of forbidden knowledge, the map of hallucinations, and the grog that dissolves reality itself, dark fantasy, mystical ingredients, potion brewing, Studio Ghibli inspired.",
+          () => talkToVoodoo(), 'voodoo_items');
+      });
     }},
     { text: "Goodbye", action: () => {
-      showDialogueResponse('The Voodoo Lady', '#ff00ff',
-        "Farewell, brave adventurer, walking away shot, sunset, emotional, 35mm film grain, nostalgic, by Makoto Shinkai.",
-        () => closeDialogue());
+      playVoice('guy_goodbye').then(() => {
+        showDialogueResponse('The Voodoo Lady', '#ff00ff',
+          "Farewell, brave adventurer, walking away shot, sunset, emotional, 35mm film grain, nostalgic, by Makoto Shinkai.",
+          () => closeDialogue(), 'voodoo_bye');
+      });
     }}
   ];
   showDialogue('The Voodoo Lady (MidJourney)', '#ff00ff', opts);
@@ -899,7 +994,7 @@ function useCauldron(item) {
     removeFromInventory('Golden USB Drive');
     state.selectedInvItem = null;
     playCauldronSFX();
-    showNarrator("The USB drive sizzles as it enters the brew. The cauldron glows with forbidden knowledge.");
+    showNarrator("The USB drive sizzles as it enters the brew. The cauldron glows with forbidden knowledge.", null, 'narrator_cauldron_usb');
     checkCauldronComplete();
     return;
   }
@@ -908,7 +1003,7 @@ function useCauldron(item) {
     removeFromInventory('AI-Enhanced Map');
     state.selectedInvItem = null;
     playCauldronSFX();
-    showNarrator("The hallucinated map dissolves into the mixture. New imaginary locations appear in the bubbles.");
+    showNarrator("The hallucinated map dissolves into the mixture. New imaginary locations appear in the bubbles.", null, 'narrator_cauldron_map');
     checkCauldronComplete();
     return;
   }
@@ -917,11 +1012,11 @@ function useCauldron(item) {
     removeFromInventory('Mug of Grog');
     state.selectedInvItem = null;
     playCauldronSFX();
-    showNarrator("The grog melts THROUGH the cauldron, somehow improving the potion...");
+    showNarrator("The grog melts THROUGH the cauldron, somehow improving the potion...", null, 'narrator_cauldron_grog');
     checkCauldronComplete();
     return;
   }
-  showNarrator("The cauldron rejects that item. It has standards.");
+  showNarrator("The cauldron rejects that item. It has standards.", null, 'narrator_cauldron_reject');
 }
 
 function checkCauldronComplete() {
@@ -1578,8 +1673,7 @@ titleOverlay.addEventListener('click', () => {
   state.guybrush.y = 380;
   state.guybrush.targetX = 480;
   state.guybrush.targetY = 380;
-  enterScene('dock');
-  showNarrator("Welcome to Monkey AIsland! This entire game was generated by AI, which means there's a 73.2% chance everything works correctly. That statistic was also generated by AI.", 7000);
+  showNarrator("Welcome to Monkey AIsland! This entire game was generated by AI, which means there's a 73.2% chance everything works correctly. That statistic was also generated by AI.", 7000, 'narrator_welcome');
 });
 
 // ---- DEBUG OVERLAY ----
