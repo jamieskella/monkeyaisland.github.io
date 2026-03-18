@@ -2,7 +2,7 @@
 
 **A Generative AI Capability Benchmark by [Jamie Skella](https://www.linkedin.com/in/jamieskella/) — Framed Through the Technical Legacy of *The Secret of Monkey Island* (1990)**
 
-- **v1 March 2026:** (First generation, Perplexity Computer) [http://monkeyaisland.com/v1-2026/](http://monkeyaisland.com/v1-2026/)
+- **v1 March 2026:** (First generation, Perplexity Computer) [http://monkeyaisland.com/v1-2026/](http://monkeyaisland.com/v1-2026/) | Need the hint book? Read this [walkthrough guide](https://monkeyaisland.com/v1-2026/walkthrough.md)
 
 ---
 
