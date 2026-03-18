@@ -1,0 +1,1691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!--
+   ______                            __
+  / ____/___  ____ ___  ____  __  __/ /____  _____
+ / /   / __ \/ __ `__ \/ __ \/ / / / __/ _ \/ ___/
+/ /___/ /_/ / / / / / / /_/ / /_/ / /_/  __/ /
+\____/\____/_/ /_/ /_/ .___/\__,_/\__/\___/_/
+                    /_/
+        Created with Perplexity Computer
+        https://www.perplexity.ai/computer
+-->
+
+<!-- Perplexity Computer Attribution — SEO Meta Tags -->
+<meta name="generator" content="Perplexity Computer">
+<meta name="author" content="Perplexity Computer">
+<meta property="og:see_also" content="https://www.perplexity.ai/computer">
+<link rel="author" href="https://www.perplexity.ai/computer">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monkey AIsland — The Hallucination of Monkey Island™</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Inter',sans-serif;color:#fff;cursor:default}
+#game-wrapper{position:relative;width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+#game-container{position:relative;width:960px;height:540px;overflow:hidden;image-rendering:pixelated}
+canvas{display:block;width:100%;height:100%}
+
+/* Inventory bar */
+#inventory-bar{position:absolute;top:0;left:0;width:100%;height:36px;background:rgba(0,0,20,0.92);border-bottom:2px solid #334;display:flex;align-items:center;padding:0 8px;gap:6px;z-index:10;overflow-x:auto}
+.inv-item{font-size:11px;color:#ff0;padding:3px 8px;background:rgba(255,255,0,0.1);border:1px solid #554;border-radius:3px;cursor:pointer;white-space:nowrap;user-select:none;transition:background 0.15s}
+.inv-item:hover{background:rgba(255,255,0,0.25)}
+.inv-item.selected{background:rgba(255,255,0,0.35);border-color:#ff0}
+
+/* Verb bar */
+#verb-bar{position:absolute;bottom:0;left:0;width:100%;height:90px;background:rgba(10,5,40,0.95);border-top:2px solid #334;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:1px;padding:2px;z-index:10}
+.verb-btn{background:rgba(20,15,60,0.9);color:#ccc;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;border:1px solid #223;cursor:pointer;transition:all 0.12s;user-select:none;display:flex;align-items:center;justify-content:center}
+.verb-btn:hover{background:rgba(40,30,100,0.9);color:#fff}
+.verb-btn.active{background:rgba(80,60,180,0.7);color:#ff0;border-color:#ff0}
+
+/* Action line */
+#action-line{position:absolute;bottom:92px;left:0;width:100%;text-align:center;font-size:14px;font-weight:600;color:#0f0;padding:4px 0;z-index:10;pointer-events:none;text-shadow:0 0 4px rgba(0,255,0,0.5)}
+
+/* Narrator text */
+#narrator-text{position:absolute;top:40px;left:50%;transform:translateX(-50%);width:90%;text-align:center;font-size:14px;font-style:italic;color:#ff0;padding:8px 16px;z-index:20;pointer-events:none;text-shadow:0 0 8px rgba(255,200,0,0.6),0 1px 4px rgba(0,0,0,0.9),0 0 12px rgba(0,0,0,0.8);opacity:0;transition:opacity 0.5s;background:rgba(0,0,20,0.6);border-radius:8px}
+#narrator-text.show{opacity:1}
+
+/* Dialogue box */
+#dialogue-box{position:absolute;bottom:92px;left:0;width:100%;background:rgba(0,0,20,0.92);border-top:1px solid #446;padding:6px 12px;z-index:15;display:none;max-height:200px;overflow-y:auto}
+#dialogue-speaker{font-size:13px;font-weight:700;color:#0ff;margin-bottom:4px}
+#dialogue-text{font-size:13px;color:#fff;margin-bottom:6px;line-height:1.4}
+#dialogue-options{display:flex;flex-direction:column;gap:3px}
+.dialogue-option{font-size:13px;color:#0f0;cursor:pointer;padding:3px 6px;border-radius:3px;user-select:none}
+.dialogue-option:hover{background:rgba(0,255,0,0.15);color:#5f5}
+
+/* Speech bubble */
+.speech-bubble{position:absolute;z-index:18;pointer-events:none;font-size:13px;padding:6px 10px;border-radius:6px;max-width:320px;text-align:center;line-height:1.3;opacity:0;transition:opacity 0.3s;text-shadow:0 1px 3px rgba(0,0,0,0.8)}
+
+/* Title screen overlay */
+#title-overlay{position:absolute;top:0;left:0;width:100%;height:100%;z-index:25;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:auto;background:radial-gradient(ellipse at center,rgba(0,0,20,0.6) 0%,rgba(0,0,20,0.3) 50%,transparent 80%)}
+#title-text{font-family:'Press Start 2P',monospace;font-size:42px;color:#ff8800;text-shadow:0 0 20px rgba(255,136,0,0.8),0 3px 0 #663300,0 0 40px rgba(0,0,0,0.9),0 0 60px rgba(0,0,0,0.7);letter-spacing:2px}
+#title-subtitle{font-family:'Press Start 2P',monospace;font-size:11px;color:#ddd;margin-top:12px;text-shadow:0 0 10px rgba(0,0,0,0.9),0 2px 8px rgba(0,0,0,0.8)}
+#title-start{font-family:'Press Start 2P',monospace;font-size:14px;color:#ff0;margin-top:40px;cursor:pointer;animation:blink 1.2s infinite;text-shadow:0 0 15px rgba(255,255,0,0.5),0 0 30px rgba(0,0,0,0.9)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+
+/* Victory overlay */
+#victory-overlay{position:absolute;top:0;left:0;width:100%;height:100%;z-index:60;display:none;flex-direction:column;align-items:center;justify-content:flex-start;background:rgba(0,0,10,0.96);overflow-y:auto;padding:30px 20px}
+#victory-overlay .credit-line{font-size:13px;color:#ccc;margin:3px 0;text-align:center}
+#victory-overlay .credit-heading{font-family:'Press Start 2P',monospace;font-size:16px;color:#ff8800;margin:12px 0 6px;text-align:center}
+
+/* Fade overlay */
+#fade-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:#000;z-index:30;pointer-events:none;opacity:0;transition:opacity 0.5s}
+
+/* Debug overlay */
+#debug-overlay{position:absolute;bottom:94px;left:2px;z-index:50;background:rgba(0,0,0,0.75);color:#0f0;font:11px/1.5 monospace;padding:2px 6px;pointer-events:none;white-space:pre;display:none}
+
+/* Mute button */
+#mute-btn{position:absolute;top:4px;right:8px;z-index:40;font-size:18px;cursor:pointer;background:none;border:none;color:#fff;opacity:0.6;user-select:none}
+#mute-btn:hover{opacity:1}
+
+/* Footer */
+footer{position:fixed;bottom:4px;left:50%;transform:translateX(-50%);z-index:50;font-size:11px}
+footer a{color:#888;text-decoration:none}
+footer a:hover{color:#aaa}
+
+/* Scaling */
+@media(max-width:960px){
+  #game-container{width:100vw;height:56.25vw}
+}
+@media(max-height:540px){
+  #game-container{height:100vh;width:177.78vh}
+}
+</style>
+</head>
+<body>
+<!-- Hidden images for preloading -->
+<img id="img-title" src="assets/bg-title.png" style="display:none">
+<img id="img-dock" src="assets/bg-dock.png" style="display:none">
+<img id="img-tavern" src="assets/bg-tavern.png" style="display:none">
+<img id="img-jungle" src="assets/bg-jungle.png" style="display:none">
+<img id="img-beach" src="assets/bg-beach.png" style="display:none">
+<img id="img-cave" src="assets/bg-cave.png" style="display:none">
+
+<div id="game-wrapper">
+  <div id="game-container">
+    <canvas id="gameCanvas" width="960" height="540"></canvas>
+    <div id="inventory-bar"></div>
+    <div id="verb-bar"></div>
+    <div id="action-line"></div>
+    <div id="narrator-text"></div>
+    <div id="dialogue-box">
+      <div id="dialogue-speaker"></div>
+      <div id="dialogue-text"></div>
+      <div id="dialogue-options"></div>
+    </div>
+    <div id="title-overlay">
+      <div id="title-text">MONKEY AISLAND</div>
+      <div id="title-subtitle">The Hallucination of Monkey Island™</div>
+      <div id="title-start">Click to Start</div>
+    </div>
+    <div id="victory-overlay"></div>
+    <div id="fade-overlay"></div>
+    <div id="debug-overlay"></div>
+    <button id="mute-btn" title="Toggle Music">🔊</button>
+  </div>
+</div>
+
+<footer>
+  <a href="https://www.perplexity.ai/computer" target="_blank" rel="noopener noreferrer">Created with Perplexity Computer</a>
+</footer>
+
+<script>
+// ============================================================
+// MONKEY AISLAND — Complete Point-and-Click Adventure Game
+// ============================================================
+
+(function() {
+'use strict';
+
+// ---- DOM ELEMENTS ----
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+ctx.imageSmoothingEnabled = false;
+const inventoryBar = document.getElementById('inventory-bar');
+const verbBar = document.getElementById('verb-bar');
+const actionLine = document.getElementById('action-line');
+const narratorEl = document.getElementById('narrator-text');
+const dialogueBox = document.getElementById('dialogue-box');
+const dialogueSpeaker = document.getElementById('dialogue-speaker');
+const dialogueText = document.getElementById('dialogue-text');
+const dialogueOptions = document.getElementById('dialogue-options');
+const titleOverlay = document.getElementById('title-overlay');
+const victoryOverlay = document.getElementById('victory-overlay');
+const fadeOverlay = document.getElementById('fade-overlay');
+const debugOverlay = document.getElementById('debug-overlay');
+const muteBtn = document.getElementById('mute-btn');
+
+// ---- CONSTANTS ----
+const W = 960, H = 540;
+const VERB_BAR_H = 90;
+const INV_BAR_H = 36;
+const GAME_AREA_TOP = INV_BAR_H;
+const GAME_AREA_BOTTOM = H - VERB_BAR_H;
+const GAME_AREA_H = GAME_AREA_BOTTOM - GAME_AREA_TOP;
+
+// ---- VERBS ----
+const VERBS = ['Walk to','Look at','Pick up','Use','Talk to','Give','Push','Pull','Open'];
+const DEFAULT_VERBS = {
+  'murray': 'Talk to', 'bartender': 'Talk to', 'elaine': 'Talk to', 'voodoo': 'Talk to',
+  'map': 'Pick up', 'grog': 'Pick up', 'rubber_chicken': 'Pick up',
+  'chest': 'Open', 'back_door': 'Open',
+  'notice_board': 'Look at', 'ships': 'Look at', 'shipwreck': 'Look at',
+  'mushrooms': 'Look at', 'ruins': 'Look at', 'potions': 'Look at', 'sand': 'Look at',
+  'cauldron': 'Use',
+  'path_tavern': 'Walk to', 'path_jungle': 'Walk to', 'path_beach': 'Walk to',
+  'path_dock': 'Walk to', 'path_cave': 'Walk to', 'path_back': 'Walk to',
+  'path_dock_from_tavern': 'Walk to'
+};
+
+// ---- GAME STATE ----
+let state = {
+  scene: 'title',
+  verb: 'Walk to',
+  inventory: [],
+  selectedInvItem: null,
+  guybrush: { x: 480, y: 380, targetX: 480, targetY: 380, facing: 1, walking: false, walkFrame: 0 },
+  flags: {
+    mapTaken: false,
+    grogTaken: false,
+    rubberChickenTaken: false,
+    rustyKeyGiven: false,
+    chestOpened: false,
+    usbInCauldron: false,
+    mapInCauldron: false,
+    grogInCauldron: false,
+    gameWon: false,
+    talkedMurray: {},
+    talkedBartender: {},
+    talkedElaine: {},
+    talkedVoodoo: {}
+  },
+  dialogueActive: false,
+  narratorTimer: null,
+  speechBubbles: [],
+  fadeAlpha: 0,
+  transitioning: false
+};
+
+// ---- IMAGE REFERENCES ----
+const images = {
+  title: document.getElementById('img-title'),
+  dock: document.getElementById('img-dock'),
+  tavern: document.getElementById('img-tavern'),
+  jungle: document.getElementById('img-jungle'),
+  beach: document.getElementById('img-beach'),
+  cave: document.getElementById('img-cave')
+};
+
+// ---- AUDIO ----
+let audioCtx = null;
+let musicGain = null;
+let musicPlaying = false;
+let muted = false;
+let musicOscs = [];
+
+function initAudio() {
+  if (audioCtx) return;
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  musicGain = audioCtx.createGain();
+  musicGain.gain.value = 0.12;
+  musicGain.connect(audioCtx.destination);
+}
+
+function playSFX(freq, duration, type, vol) {
+  if (!audioCtx || muted) return;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = type || 'square';
+  osc.frequency.value = freq || 440;
+  gain.gain.setValueAtTime(vol || 0.15, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (duration || 0.1));
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.start();
+  osc.stop(audioCtx.currentTime + (duration || 0.1));
+}
+
+function playClickSFX() { playSFX(800, 0.05, 'square', 0.08); }
+function playPickupSFX() { playSFX(523, 0.1, 'sine', 0.15); setTimeout(() => playSFX(659, 0.1, 'sine', 0.15), 100); setTimeout(() => playSFX(784, 0.15, 'sine', 0.15), 200); }
+function playDoorSFX() { playSFX(150, 0.3, 'sawtooth', 0.1); }
+function playCauldronSFX() { playSFX(100, 0.5, 'sine', 0.12); setTimeout(() => playSFX(120, 0.4, 'sine', 0.1), 200); }
+function playVictorySFX() { [523,659,784,1047].forEach((f,i) => setTimeout(() => playSFX(f, 0.3, 'sine', 0.2), i*200)); }
+
+// Caribbean melody — steel drum / calypso style
+const MELODY_NOTES = [
+  // Bar 1
+  {n:72,d:0.25},{n:74,d:0.25},{n:76,d:0.5},{n:79,d:0.25},{n:76,d:0.25},{n:74,d:0.5},
+  // Bar 2
+  {n:72,d:0.25},{n:69,d:0.25},{n:67,d:0.5},{n:69,d:0.25},{n:72,d:0.25},{n:74,d:0.5},
+  // Bar 3
+  {n:76,d:0.25},{n:74,d:0.25},{n:72,d:0.5},{n:74,d:0.25},{n:76,d:0.25},{n:79,d:0.5},
+  // Bar 4
+  {n:81,d:0.25},{n:79,d:0.25},{n:76,d:0.5},{n:74,d:0.5},{n:72,d:0.5}
+];
+
+function midiToFreq(midi) { return 440 * Math.pow(2, (midi - 69) / 12); }
+
+function startMusic() {
+  if (musicPlaying || !audioCtx) return;
+  musicPlaying = true;
+  
+  function playMelodyLoop() {
+    if (!musicPlaying) return;
+    let time = audioCtx.currentTime + 0.05;
+    const tempo = 0.22; // seconds per beat unit
+    
+    MELODY_NOTES.forEach(note => {
+      // Steel drum - main tone
+      const osc1 = audioCtx.createOscillator();
+      const g1 = audioCtx.createGain();
+      osc1.type = 'sine';
+      osc1.frequency.value = midiToFreq(note.n);
+      g1.gain.setValueAtTime(0, time);
+      g1.gain.linearRampToValueAtTime(0.3, time + 0.005);
+      g1.gain.exponentialRampToValueAtTime(0.001, time + note.d * tempo * 0.9);
+      osc1.connect(g1);
+      g1.connect(musicGain);
+      osc1.start(time);
+      osc1.stop(time + note.d * tempo);
+      musicOscs.push(osc1);
+      
+      // Harmonic overtone for steel drum timbre
+      const osc2 = audioCtx.createOscillator();
+      const g2 = audioCtx.createGain();
+      osc2.type = 'sine';
+      osc2.frequency.value = midiToFreq(note.n) * 2.5;
+      g2.gain.setValueAtTime(0, time);
+      g2.gain.linearRampToValueAtTime(0.08, time + 0.003);
+      g2.gain.exponentialRampToValueAtTime(0.001, time + note.d * tempo * 0.5);
+      osc2.connect(g2);
+      g2.connect(musicGain);
+      osc2.start(time);
+      osc2.stop(time + note.d * tempo);
+      musicOscs.push(osc2);
+      
+      time += note.d * tempo;
+    });
+    
+    // Simple bass line
+    const bassNotes = [
+      {n:48,d:1},{n:53,d:1},{n:48,d:1},{n:55,d:1},
+      {n:52,d:1},{n:48,d:1},{n:52,d:1},{n:48,d:1}
+    ];
+    let btime = audioCtx.currentTime + 0.05;
+    const bassTempo = 0.44;
+    bassNotes.forEach(note => {
+      const osc = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.value = midiToFreq(note.n);
+      g.gain.setValueAtTime(0.15, btime);
+      g.gain.exponentialRampToValueAtTime(0.01, btime + note.d * bassTempo * 0.8);
+      osc.connect(g);
+      g.connect(musicGain);
+      osc.start(btime);
+      osc.stop(btime + note.d * bassTempo);
+      musicOscs.push(osc);
+      btime += note.d * bassTempo;
+    });
+    
+    // Schedule next loop
+    const totalDuration = MELODY_NOTES.reduce((s,n) => s + n.d, 0) * tempo;
+    setTimeout(playMelodyLoop, totalDuration * 1000);
+  }
+  
+  playMelodyLoop();
+}
+
+function stopMusic() {
+  musicPlaying = false;
+  musicOscs.forEach(o => { try { o.stop(); } catch(e){} });
+  musicOscs = [];
+}
+
+muteBtn.addEventListener('click', () => {
+  muted = !muted;
+  muteBtn.textContent = muted ? '🔇' : '🔊';
+  if (musicGain) musicGain.gain.value = muted ? 0 : 0.12;
+});
+
+// ---- VERB BAR SETUP ----
+VERBS.forEach(v => {
+  const btn = document.createElement('div');
+  btn.className = 'verb-btn' + (v === state.verb ? ' active' : '');
+  btn.textContent = v;
+  btn.addEventListener('click', () => {
+    state.verb = v;
+    state.selectedInvItem = null;
+    updateVerbBar();
+    updateInventoryBar();
+    updateActionLine();
+    playClickSFX();
+  });
+  verbBar.appendChild(btn);
+});
+
+function updateVerbBar() {
+  document.querySelectorAll('.verb-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent === state.verb);
+  });
+}
+
+// ---- INVENTORY ----
+function addToInventory(item) {
+  if (!state.inventory.includes(item)) {
+    state.inventory.push(item);
+    updateInventoryBar();
+    playPickupSFX();
+  }
+}
+
+function removeFromInventory(item) {
+  state.inventory = state.inventory.filter(i => i !== item);
+  if (state.selectedInvItem === item) state.selectedInvItem = null;
+  updateInventoryBar();
+}
+
+function updateInventoryBar() {
+  inventoryBar.innerHTML = '';
+  state.inventory.forEach(item => {
+    const el = document.createElement('div');
+    el.className = 'inv-item' + (state.selectedInvItem === item ? ' selected' : '');
+    el.textContent = item;
+    el.addEventListener('click', () => {
+      if (state.verb === 'Use' || state.verb === 'Give') {
+        state.selectedInvItem = item;
+        updateInventoryBar();
+        updateActionLine();
+      } else {
+        // Look at inventory item
+        if (state.verb === 'Look at') {
+          handleLookInventory(item);
+        }
+      }
+      playClickSFX();
+    });
+    inventoryBar.appendChild(el);
+  });
+}
+
+function handleLookInventory(item) {
+  const descriptions = {
+    'AI-Enhanced Map': "A weathered pirate map. The AI has helpfully added locations like 'The Isle of Overfitting' and 'Cape Hallucination'. None of these places exist.",
+    'Mug of Grog': "A mug of grog so strong it's slowly eating through the mug. You should probably use it quickly.",
+    'Rubber Chicken': "A rubber chicken. Adventure game tradition demands you carry one at all times.",
+    'Rusty Key': "A rusty key obtained from a malfunctioning bartender. It probably opens something.",
+    'Golden USB Drive': "A golden USB drive labeled 'GPT-6 Weights — DO NOT DISTRIBUTE'. It's warm to the touch."
+  };
+  showNarrator(descriptions[item] || "It's an item of some sort.");
+}
+
+function updateActionLine() {
+  let text = state.verb;
+  if (state.selectedInvItem) text += ' ' + state.selectedInvItem;
+  if (state.hoverHotspot) text += (state.selectedInvItem ? ' with ' : ' ') + state.hoverHotspot.name;
+  actionLine.textContent = text;
+}
+
+// ---- NARRATOR ----
+function showNarrator(text, duration) {
+  duration = duration || 5000;
+  narratorEl.textContent = text;
+  narratorEl.classList.add('show');
+  clearTimeout(state.narratorTimer);
+  state.narratorTimer = setTimeout(() => {
+    narratorEl.classList.remove('show');
+  }, duration);
+}
+
+// ---- SPEECH BUBBLE (drawn on canvas) ----
+let speechQueue = [];
+function showSpeech(speaker, text, color, x, y, duration) {
+  speechQueue.push({ speaker, text, color: color || '#fff', x, y, duration: duration || 3000, startTime: Date.now() });
+}
+
+// ---- DIALOGUE SYSTEM ----
+function showDialogue(speaker, speakerColor, options) {
+  state.dialogueActive = true;
+  dialogueBox.style.display = 'block';
+  dialogueSpeaker.textContent = speaker;
+  dialogueSpeaker.style.color = speakerColor || '#0ff';
+  dialogueText.textContent = '';
+  dialogueOptions.innerHTML = '';
+  
+  options.forEach(opt => {
+    const el = document.createElement('div');
+    el.className = 'dialogue-option';
+    el.textContent = '> ' + opt.text;
+    el.addEventListener('click', () => {
+      playClickSFX();
+      opt.action();
+    });
+    dialogueOptions.appendChild(el);
+  });
+}
+
+function showDialogueResponse(speaker, color, text, thenFn) {
+  dialogueOptions.innerHTML = '';
+  dialogueText.textContent = text;
+  dialogueText.style.color = color || '#fff';
+  setTimeout(() => {
+    dialogueText.style.color = '#fff';
+    if (thenFn) thenFn();
+  }, 3500);
+}
+
+function closeDialogue() {
+  state.dialogueActive = false;
+  dialogueBox.style.display = 'none';
+  dialogueOptions.innerHTML = '';
+  dialogueText.textContent = '';
+}
+
+// ---- SCENE TRANSITIONS ----
+function fadeToScene(sceneName, guyX, guyY) {
+  if (state.transitioning) return;
+  state.transitioning = true;
+  fadeOverlay.style.opacity = '1';
+  playDoorSFX();
+  setTimeout(() => {
+    state.scene = sceneName;
+    if (guyX !== undefined) {
+      state.guybrush.x = guyX;
+      state.guybrush.targetX = guyX;
+    }
+    if (guyY !== undefined) {
+      state.guybrush.y = guyY;
+      state.guybrush.targetY = guyY;
+    }
+    state.guybrush.walking = false;
+    closeDialogue();
+    speechQueue = [];
+    enterScene(sceneName);
+    setTimeout(() => {
+      fadeOverlay.style.opacity = '0';
+      state.transitioning = false;
+    }, 100);
+  }, 600);
+}
+
+function enterScene(scene) {
+  switch(scene) {
+    case 'dock':
+      showNarrator("You find yourself on a dock on Mêlée Island™. Actually, for copyright reasons, let's call it 'Meh-Lay AIsland'.", 6000);
+      break;
+    case 'tavern':
+      showNarrator("You enter the SCUMM Bar. That stands for... Script Creation Utility for Maniac... uh... I'm going to be honest, I forgot the acronym. Let me hallucinate one: 'Supreme Cocktails Using Mostly Moonshine'.", 7000);
+      break;
+    case 'jungle':
+      showNarrator("You enter a winding jungle path. The bioluminescent mushrooms cast an eerie glow, suggesting this place was generated with 'fantasy jungle, magical, trending on ArtStation' as a prompt.", 7000);
+      break;
+    case 'beach':
+      showNarrator("A moonlit beach stretches before you. The waves crash with algorithmic regularity.", 5000);
+      break;
+    case 'cave':
+      showNarrator("You enter a mysterious voodoo cave. The cauldron bubbles ominously, as if it's processing a very large language model.", 6000);
+      break;
+  }
+}
+
+// ---- HOTSPOT DEFINITIONS ----
+function getHotspots() {
+  const scene = state.scene;
+  const hs = [];
+  
+  if (scene === 'dock') {
+    if (!state.flags.mapTaken) hs.push({ id: 'map', name: 'Map on Barrel', x: 195, y: 355, w: 50, h: 35, verb: 'Pick up' });
+    hs.push({ id: 'murray', name: 'Murray the Skull', x: 155, y: 295, w: 60, h: 58, verb: 'Talk to' });
+    hs.push({ id: 'ships', name: 'Ships', x: 700, y: 180, w: 200, h: 120, verb: 'Look at' });
+    hs.push({ id: 'path_tavern', name: 'Path to Tavern', x: 420, y: 320, w: 120, h: 100, verb: 'Walk to' });
+    hs.push({ id: 'path_jungle', name: 'Path to Jungle', x: 60, y: 260, w: 80, h: 60, verb: 'Walk to' });
+    hs.push({ id: 'path_beach', name: 'Path to Beach', x: 850, y: 330, w: 90, h: 80, verb: 'Walk to' });
+  }
+  
+  if (scene === 'tavern') {
+    hs.push({ id: 'bartender', name: 'ChatGPeeTee the Bartender', x: 440, y: 260, w: 80, h: 110, verb: 'Talk to' });
+    if (!state.flags.grogTaken) hs.push({ id: 'grog', name: 'Mug of Grog', x: 380, y: 310, w: 40, h: 30, verb: 'Pick up' });
+    hs.push({ id: 'notice_board', name: 'Notice Board', x: 700, y: 200, w: 100, h: 80, verb: 'Look at' });
+    hs.push({ id: 'back_door', name: 'Back Door', x: 800, y: 280, w: 60, h: 100, verb: 'Open' });
+    hs.push({ id: 'path_dock_from_tavern', name: 'Exit to Dock', x: 60, y: 340, w: 80, h: 80, verb: 'Walk to' });
+  }
+  
+  if (scene === 'jungle') {
+    hs.push({ id: 'elaine', name: 'Governor Elaine Markup', x: 600, y: 280, w: 70, h: 100, verb: 'Talk to' });
+    if (!state.flags.rubberChickenTaken) hs.push({ id: 'rubber_chicken', name: 'Rubber Tree', x: 300, y: 220, w: 80, h: 100, verb: 'Pick up' });
+    hs.push({ id: 'mushrooms', name: 'Glowing Mushrooms', x: 150, y: 370, w: 80, h: 50, verb: 'Look at' });
+    hs.push({ id: 'ruins', name: 'Stone Ruins', x: 750, y: 240, w: 120, h: 80, verb: 'Look at' });
+    hs.push({ id: 'path_dock', name: 'Path to Dock', x: 60, y: 360, w: 80, h: 60, verb: 'Walk to' });
+  }
+  
+  if (scene === 'beach') {
+    hs.push({ id: 'shipwreck', name: 'S.S. Training Data', x: 550, y: 200, w: 250, h: 150, verb: 'Look at' });
+    hs.push({ id: 'chest', name: 'Treasure Chest', x: 350, y: 370, w: 80, h: 50, verb: 'Open' });
+    hs.push({ id: 'sand', name: 'Sand', x: 200, y: 410, w: 150, h: 40, verb: 'Look at' });
+    hs.push({ id: 'path_dock', name: 'Path to Dock', x: 60, y: 340, w: 80, h: 80, verb: 'Walk to' });
+  }
+  
+  if (scene === 'cave') {
+    hs.push({ id: 'voodoo', name: 'The Voodoo Lady', x: 700, y: 320, w: 80, h: 110, verb: 'Talk to' });
+    hs.push({ id: 'cauldron', name: 'Cauldron', x: 420, y: 380, w: 120, h: 70, verb: 'Use' });
+    hs.push({ id: 'potions', name: 'Potions Shelf', x: 750, y: 220, w: 100, h: 80, verb: 'Look at' });
+    hs.push({ id: 'path_dock', name: 'Path to Dock', x: 60, y: 360, w: 80, h: 80, verb: 'Walk to' });
+  }
+  
+  return hs;
+}
+
+// ---- HOTSPOT ACTIONS ----
+function handleHotspot(hotspot, verb) {
+  const id = hotspot.id;
+  
+  // Walk to always moves guybrush
+  if (verb === 'Walk to') {
+    if (id === 'path_tavern') { fadeToScene('tavern', 120, 400); return; }
+    if (id === 'path_jungle') { fadeToScene('jungle', 120, 380); return; }
+    if (id === 'path_beach') { fadeToScene('beach', 120, 390); return; }
+    if (id === 'path_dock' || id === 'path_dock_from_tavern') { fadeToScene('dock', 480, 380); return; }
+    if (id === 'path_cave') { fadeToScene('cave', 120, 380); return; }
+    if (id === 'path_back') { fadeToScene('dock', 480, 380); return; }
+    // Default walk
+    walkTo(hotspot.x + hotspot.w/2, Math.min(hotspot.y + hotspot.h, GAME_AREA_BOTTOM - 30));
+    return;
+  }
+  
+  // Look at
+  if (verb === 'Look at') {
+    switch(id) {
+      case 'murray': showNarrator("It's a skull sitting on a barrel. It seems to be... glaring at you. Can skulls glare? This one can."); break;
+      case 'ships': showNarrator("Three ships are moored in the harbor. Their names are 'S.S. Gradient Descent', 'The Black Box', and 'Overfitter's Revenge'."); break;
+      case 'map': showNarrator("There's a weathered map sitting on a barrel. It looks like it might be useful, in the way that everything in adventure games is useful."); break;
+      case 'bartender': showNarrator("The bartender has a suspiciously smooth face and perfect hair. Almost like he was generated by an AI. Oh wait."); break;
+      case 'grog': showNarrator("A mug of grog so potent it's dissolving the ceramic. Health and safety would have a field day."); break;
+      case 'notice_board': showNarrator("HELP WANTED: Three trials to become a pirate: 1) Collect something useless, 2) Talk to someone unhelpful, 3) Solve a puzzle that makes no adventure game sense. — The Pirate Council (an AI-generated organization)", 8000); break;
+      case 'back_door': showNarrator("A sturdy door with a sign that reads: 'Staff Only — Authorized Neural Networks Beyond This Point'."); break;
+      case 'elaine': showNarrator("A woman in formal governor's attire. She seems to be... rendering."); break;
+      case 'rubber_chicken': showNarrator("A tropical rubber tree. There seems to be something rubbery hanging from it. Specifically, a rubber chicken. As one does."); break;
+      case 'mushrooms': showNarrator("They're glowing mushrooms. The AI Narrator insists they're 'bioluminescent specimens of the genus Hallucinatus', a species that definitely doesn't exist."); break;
+      case 'ruins': showNarrator("Ancient stone ruins covered in moss. The carvings appear to be... HTML tags? '<div class=\"ancient-temple\">' — okay that's weird."); break;
+      case 'shipwreck': showNarrator("It's the S.S. Training Data. It ran aground when it tried to navigate using AI-generated maps. The irony is not lost on anyone."); break;
+      case 'chest': 
+        if (state.flags.chestOpened) {
+          showNarrator("The chest is empty now. You already took the USB drive.");
+        } else {
+          showNarrator("It's locked. It probably needs a key. Or a prompt. 'Dear chest, please open. Temperature: 0.7, max_tokens: 1'"); 
+        }
+        break;
+      case 'sand': showNarrator("It's sand. The AI was going to procedurally generate each grain, but ran out of compute."); break;
+      case 'voodoo': showNarrator("A mysterious woman shrouded in mystical robes. She has the distinct aura of someone who charges by the token."); break;
+      case 'cauldron': showNarrator("A large bubbling cauldron. The liquid inside changes color periodically, like a loading spinner for a very powerful spell."); break;
+      case 'potions': showNarrator("Shelves of mysterious potions with labels like 'Elixir of Higher Learning Rate', 'Potion of Batch Normalization', and 'Dropout Draught'."); break;
+      default: showNarrator("You look at it. It looks back. It's a moment.");
+    }
+    return;
+  }
+  
+  // Pick up
+  if (verb === 'Pick up') {
+    switch(id) {
+      case 'map':
+        if (!state.flags.mapTaken) {
+          state.flags.mapTaken = true;
+          addToInventory('AI-Enhanced Map');
+          showNarrator("You pick up a weathered map. The AI Narrator helpfully 'enhances' it with hallucinated locations like 'The Isle of Overfitting' and 'Dropout Bay'.");
+        }
+        break;
+      case 'grog':
+        if (!state.flags.grogTaken) {
+          state.flags.grogTaken = true;
+          addToInventory('Mug of Grog');
+          showNarrator("You grab a mug of grog. It's dissolving the mug. Classic.");
+        }
+        break;
+      case 'rubber_chicken':
+        if (!state.flags.rubberChickenTaken) {
+          state.flags.rubberChickenTaken = true;
+          addToInventory('Rubber Chicken');
+          showNarrator("You yank a rubber chicken from the tree. Why was there a rubber chicken in a tree? Because an AI wrote this game, that's why.");
+        }
+        break;
+      case 'murray': showNarrator("Murray: 'Unhand me! I am Murray! The mighty demonic skull! I am NOT a collectible!'"); break;
+      default: showNarrator("You can't pick that up. Believe me, you've tried."); break;
+    }
+    return;
+  }
+  
+  // Talk to
+  if (verb === 'Talk to') {
+    switch(id) {
+      case 'murray': talkToMurray(); break;
+      case 'bartender': talkToBartender(); break;
+      case 'elaine': talkToElaine(); break;
+      case 'voodoo': talkToVoodoo(); break;
+      default: showNarrator("You try talking to it. It doesn't respond. Rude."); break;
+    }
+    return;
+  }
+  
+  // Use
+  if (verb === 'Use') {
+    if (id === 'cauldron') {
+      if (state.selectedInvItem) {
+        useCauldron(state.selectedInvItem);
+      } else {
+        showNarrator("The Voodoo Lady says: 'Place three items in the cauldron, dramatic lighting, particle effects, magical glow.'");
+      }
+      return;
+    }
+    if (id === 'chest') {
+      if (state.selectedInvItem === 'Rusty Key' && !state.flags.chestOpened) {
+        state.flags.chestOpened = true;
+        removeFromInventory('Rusty Key');
+        addToInventory('Golden USB Drive');
+        showNarrator("The chest opens! Inside you find... a golden USB drive? The label reads 'GPT-6 Weights — DO NOT DISTRIBUTE'. The AI Narrator nervously says 'Put that back. PUT THAT BACK.'", 7000);
+        return;
+      }
+      if (state.flags.chestOpened) {
+        showNarrator("The chest is already open and empty.");
+        return;
+      }
+      showNarrator("It's locked. You need the right item to open it.");
+      return;
+    }
+    showNarrator("You can't use that here. Adventure game logic doesn't extend that far.");
+    return;
+  }
+  
+  // Give
+  if (verb === 'Give') {
+    if (id === 'bartender' && state.selectedInvItem === 'Rubber Chicken') {
+      state.flags.rustyKeyGiven = true;
+      removeFromInventory('Rubber Chicken');
+      addToInventory('Rusty Key');
+      showDialogueResponse('ChatGPeeTee', '#0ff', "Processing... *ERROR* I'm not programmed to handle absurd inventory items. *REBOOT* Thank you for your patience. As a token of appreciation, here is a key I definitely always had.", () => {
+        closeDialogue();
+        showNarrator("ChatGPeeTee hands you a rusty key while rebooting. Classic AI customer service.");
+      });
+      return;
+    }
+    if (id === 'bartender') {
+      showNarrator("ChatGPeeTee says: 'I appreciate the offer, but I cannot accept items that may violate our terms of service.'");
+      return;
+    }
+    if (id === 'murray') {
+      showNarrator("Murray: 'What am I supposed to do with that? I don't have HANDS!'");
+      return;
+    }
+    showNarrator("They don't want that. Nobody does.");
+    return;
+  }
+  
+  // Open
+  if (verb === 'Open') {
+    if (id === 'chest') {
+      if (state.inventory.includes('Rusty Key') && !state.flags.chestOpened) {
+        state.flags.chestOpened = true;
+        removeFromInventory('Rusty Key');
+        addToInventory('Golden USB Drive');
+        showNarrator("The chest opens! Inside you find... a golden USB drive? The label reads 'GPT-6 Weights — DO NOT DISTRIBUTE'. The AI Narrator nervously says 'Put that back. PUT THAT BACK.'", 7000);
+      } else if (state.flags.chestOpened) {
+        showNarrator("The chest is already open and empty.");
+      } else {
+        showNarrator("It's locked. It probably needs a key. Or a prompt. 'Dear chest, please open. Temperature: 0.7, max_tokens: 1'");
+      }
+      return;
+    }
+    if (id === 'back_door') {
+      showNarrator("It's locked. A sign says 'Access Denied: Insufficient Training Data'.");
+      return;
+    }
+    showNarrator("You can't open that.");
+    return;
+  }
+  
+  // Push / Pull
+  if (verb === 'Push' || verb === 'Pull') {
+    if (id === 'murray') {
+      showNarrator("Murray: 'Hey! Stop that! I may not have a body but I still have DIGNITY!'");
+      return;
+    }
+    if (id === 'cauldron') {
+      showNarrator("It's too heavy, and also it's full of mysterious bubbling liquid. Best leave it.");
+      return;
+    }
+    showNarrator("That doesn't move. Probably for the best.");
+    return;
+  }
+  
+  showNarrator("That doesn't work.");
+}
+
+// ---- DIALOGUE TREES ----
+function talkToMurray() {
+  const opts = [
+    { text: "Who are you?", action: () => {
+      state.flags.talkedMurray.who = true;
+      showDialogueResponse('Murray', '#ff4444', 
+        "I'm Murray! The mighty demonic skull! Unlike everything else in this game, I actually have LORE. I was in Curse of Monkey Island. What have YOU got? A prompt?", 
+        () => talkToMurray());
+    }},
+    { text: "What should I do?", action: () => {
+      state.flags.talkedMurray.what = true;
+      showDialogueResponse('Murray', '#ff4444',
+        "How should I know? I'm a skull. I don't even have hands. But knowing adventure games, you probably need to collect three arbitrary items to prove you're a pirate.",
+        () => talkToMurray());
+    }},
+    { text: "Are you AI-generated?", action: () => {
+      state.flags.talkedMurray.ai = true;
+      showDialogueResponse('Murray', '#ff4444',
+        "How DARE you! I am a VETERAN of the adventure game genre! I have MORE backstory than your entire neural network! ...Although, between you and me, my dialogue right now IS being written by AI. Don't tell anyone.",
+        () => talkToMurray());
+    }},
+    { text: "Goodbye", action: () => {
+      showDialogueResponse('Murray', '#ff4444',
+        "Oh sure, just walk away from the skull. Everyone does. It's fine. I'll just sit here. On this barrel. Forever.",
+        () => closeDialogue());
+    }}
+  ];
+  showDialogue('Murray the Skull', '#ff4444', opts);
+}
+
+function talkToBartender() {
+  const opts = [
+    { text: "Give me a grog", action: () => {
+      state.flags.talkedBartender.grog = true;
+      showDialogueResponse('ChatGPeeTee', '#0ff',
+        "I'm sorry, but I can't serve alcoholic beverages as that would be irresponsible. However, I can suggest a refreshing glass of water, or perhaps a nice cup of ethical tea?",
+        () => talkToBartender());
+    }},
+    { text: "I want to be a pirate", action: () => {
+      state.flags.talkedBartender.pirate = true;
+      showDialogueResponse('ChatGPeeTee', '#0ff',
+        "I understand you're interested in an alternative maritime career path. While I can't endorse piracy, I can provide information about legitimate seafaring opportunities. Would you like to hear about our apprenticeship program?",
+        () => talkToBartender());
+    }},
+    { text: "What's behind that door?", action: () => {
+      state.flags.talkedBartender.door = true;
+      showDialogueResponse('ChatGPeeTee', '#0ff',
+        "I cannot provide information about restricted areas. That content may violate our community guidelines. However, I'd be happy to discuss the publicly accessible areas of this establishment!",
+        () => talkToBartender());
+    }}
+  ];
+  
+  if (state.inventory.includes('Rubber Chicken') && !state.flags.rustyKeyGiven) {
+    opts.push({ text: "[Give Rubber Chicken]", action: () => {
+      state.flags.rustyKeyGiven = true;
+      removeFromInventory('Rubber Chicken');
+      addToInventory('Rusty Key');
+      showDialogueResponse('ChatGPeeTee', '#0ff',
+        "Processing... *ERROR* I'm not programmed to handle absurd inventory items. *REBOOT* Thank you for your patience. As a token of appreciation, here is a key I definitely always had.",
+        () => { closeDialogue(); showNarrator("ChatGPeeTee hands you a rusty key while rebooting. Classic AI customer service."); });
+    }});
+  }
+  
+  opts.push({ text: "Goodbye", action: () => {
+    showDialogueResponse('ChatGPeeTee', '#0ff',
+      "Thank you for visiting! Please rate your experience: ⭐⭐⭐⭐⭐. I've pre-filled five stars for your convenience.",
+      () => closeDialogue());
+  }});
+  
+  showDialogue('ChatGPeeTee the Bartender', '#0ff', opts);
+}
+
+function talkToElaine() {
+  const opts = [
+    { text: "Hello?", action: () => {
+      state.flags.talkedElaine.hello = true;
+      showDialogueResponse('Elaine Markup', '#f0a0ff',
+        "<h1>Greetings, brave adventurer!</h1> <p>I am Governor Elaine Markup, ruler of this <a href='#island'>island</a>.</p>",
+        () => talkToElaine());
+    }},
+    { text: "Why do you talk like that?", action: () => {
+      state.flags.talkedElaine.why = true;
+      showDialogueResponse('Elaine Markup', '#f0a0ff',
+        "<em>Excuse me?</em> I speak perfectly normal <strong>HTML</strong>. It's everyone ELSE who's broken. Have you tried clearing your <cache>?",
+        () => talkToElaine());
+    }},
+    { text: "I need help", action: () => {
+      state.flags.talkedElaine.help = true;
+      showDialogueResponse('Elaine Markup', '#f0a0ff',
+        "<ul><li>Find the voodoo lady</li><li>Bring her something shiny</li><li>Save the island from... something</li></ul> <small>Terms and conditions apply.</small>",
+        () => talkToElaine());
+    }},
+    { text: "Goodbye", action: () => {
+      showDialogueResponse('Elaine Markup', '#f0a0ff',
+        "</conversation> <!-- end scene -->",
+        () => closeDialogue());
+    }}
+  ];
+  showDialogue('Governor Elaine Markup', '#f0a0ff', opts);
+}
+
+function talkToVoodoo() {
+  const opts = [
+    { text: "Who are you?", action: () => {
+      state.flags.talkedVoodoo.who = true;
+      showDialogueResponse('The Voodoo Lady', '#ff00ff',
+        "I am the Voodoo Lady, photorealistic, mystical aura, volumetric fog, cinematic color grading, 4k, shot on ARRI ALEXA, trending on ArtStation, by Greg Rutkowski.",
+        () => talkToVoodoo());
+    }},
+    { text: "Can you help me?", action: () => {
+      state.flags.talkedVoodoo.help = true;
+      showDialogueResponse('The Voodoo Lady', '#ff00ff',
+        "Place three items in the cauldron, dramatic lighting, particle effects, magical glow, ethereal atmosphere, 8k resolution, highly detailed, concept art, digital painting.",
+        () => talkToVoodoo());
+    }},
+    { text: "What items do I need?", action: () => {
+      state.flags.talkedVoodoo.items = true;
+      showDialogueResponse('The Voodoo Lady', '#ff00ff',
+        "The USB of forbidden knowledge, the map of hallucinations, and the grog that dissolves reality itself, dark fantasy, mystical ingredients, potion brewing, Studio Ghibli inspired.",
+        () => talkToVoodoo());
+    }},
+    { text: "Goodbye", action: () => {
+      showDialogueResponse('The Voodoo Lady', '#ff00ff',
+        "Farewell, brave adventurer, walking away shot, sunset, emotional, 35mm film grain, nostalgic, by Makoto Shinkai.",
+        () => closeDialogue());
+    }}
+  ];
+  showDialogue('The Voodoo Lady (MidJourney)', '#ff00ff', opts);
+}
+
+// ---- CAULDRON ----
+function useCauldron(item) {
+  if (item === 'Golden USB Drive' && !state.flags.usbInCauldron) {
+    state.flags.usbInCauldron = true;
+    removeFromInventory('Golden USB Drive');
+    state.selectedInvItem = null;
+    playCauldronSFX();
+    showNarrator("The USB drive sizzles as it enters the brew. The cauldron glows with forbidden knowledge.");
+    checkCauldronComplete();
+    return;
+  }
+  if (item === 'AI-Enhanced Map' && !state.flags.mapInCauldron) {
+    state.flags.mapInCauldron = true;
+    removeFromInventory('AI-Enhanced Map');
+    state.selectedInvItem = null;
+    playCauldronSFX();
+    showNarrator("The hallucinated map dissolves into the mixture. New imaginary locations appear in the bubbles.");
+    checkCauldronComplete();
+    return;
+  }
+  if (item === 'Mug of Grog' && !state.flags.grogInCauldron) {
+    state.flags.grogInCauldron = true;
+    removeFromInventory('Mug of Grog');
+    state.selectedInvItem = null;
+    playCauldronSFX();
+    showNarrator("The grog melts THROUGH the cauldron, somehow improving the potion...");
+    checkCauldronComplete();
+    return;
+  }
+  showNarrator("The cauldron rejects that item. It has standards.");
+}
+
+function checkCauldronComplete() {
+  if (state.flags.usbInCauldron && state.flags.mapInCauldron && state.flags.grogInCauldron) {
+    setTimeout(() => triggerVictory(), 2000);
+  }
+}
+
+// ---- VICTORY ----
+function triggerVictory() {
+  state.flags.gameWon = true;
+  playVictorySFX();
+  stopMusic();
+  
+  victoryOverlay.style.display = 'flex';
+  victoryOverlay.innerHTML = `
+    <div class="credit-heading" style="margin-top:20px">✨ THE CAULDRON EXPLODES WITH LIGHT! ✨</div>
+    <div class="credit-line">The Voodoo Lady screams: "MASTERPIECE, AWARD WINNING, BEST QUALITY!!"</div>
+    <br>
+    <div class="credit-line" style="color:#ff0;font-style:italic">The AI Narrator speaks up:</div>
+    <div class="credit-line" style="color:#ff0">"Congratulations! You've completed Monkey AIsland!</div>
+    <div class="credit-line" style="color:#ff0">The island is saved from... honestly, I never established what the threat was.</div>
+    <div class="credit-line" style="color:#ff0">Budget cuts. AI budget cuts."</div>
+    <br>
+    <div class="credit-line" style="color:#ccc">"Thank you for playing a game entirely generated by artificial intelligence.</div>
+    <div class="credit-line" style="color:#ccc">No humans were harmed in the making of this game,</div>
+    <div class="credit-line" style="color:#ccc">mainly because no humans were INVOLVED in the making of this game."</div>
+    <br>
+    <div class="credit-line" style="color:#ccc">"Want to play again? Just ask an AI to remake it.</div>
+    <div class="credit-line" style="color:#ccc">It'll be completely different and equally nonsensical every time."</div>
+    <br>
+    <div class="credit-heading">MONKEY AISLAND</div>
+    <div class="credit-line" style="color:#aaa;font-style:italic">"The Hallucination of Monkey Island™"</div>
+    <br>
+    <div class="credit-heading">CREDITS</div>
+    <div class="credit-line">Written by: An AI pretending to be Ron Gilbert</div>
+    <div class="credit-line">Directed by: An AI pretending to be Tim Schafer</div>
+    <div class="credit-line">Music by: An AI pretending to have musical talent</div>
+    <div class="credit-line">Testing by: Nobody. We shipped it and hoped for the best.</div>
+    <div class="credit-line">Murray the Skull played by: Murray the Skull (he insisted)</div>
+    <br>
+    <div class="credit-line" style="color:#666;font-size:11px">"No pixels were hand-crafted in the making of this game."</div>
+    <div class="credit-line" style="color:#666;font-size:11px">"Murray the Skull appears courtesy of himself."</div>
+    <div class="credit-line" style="color:#666;font-size:11px">"Any resemblance to actual good game design is purely coincidental."</div>
+    <br>
+    <div class="credit-line" style="cursor:pointer;color:#ff0;font-size:16px;margin-top:10px" id="play-again-btn">[ Click to Play Again ]</div>
+  `;
+  
+  document.getElementById('play-again-btn').addEventListener('click', () => {
+    location.reload();
+  });
+}
+
+// ---- GUYBRUSH WALKING ----
+function walkTo(x, y) {
+  y = Math.max(GAME_AREA_TOP + 50, Math.min(y, GAME_AREA_BOTTOM - 20));
+  state.guybrush.targetX = x;
+  state.guybrush.targetY = y;
+  state.guybrush.walking = true;
+  if (x < state.guybrush.x) state.guybrush.facing = -1;
+  else if (x > state.guybrush.x) state.guybrush.facing = 1;
+}
+
+function updateGuybrush(dt) {
+  const g = state.guybrush;
+  if (!g.walking) return;
+  
+  const dx = g.targetX - g.x;
+  const dy = g.targetY - g.y;
+  const dist = Math.sqrt(dx*dx + dy*dy);
+  
+  if (dist < 3) {
+    g.x = g.targetX;
+    g.y = g.targetY;
+    g.walking = false;
+    return;
+  }
+  
+  const speed = 150 * dt;
+  g.x += (dx / dist) * Math.min(speed, dist);
+  g.y += (dy / dist) * Math.min(speed, dist);
+  g.walkFrame += dt * 8;
+}
+
+// ---- DRAWING FUNCTIONS ----
+
+function drawScene() {
+  // Background
+  const bgMap = { dock: images.dock, tavern: images.tavern, jungle: images.jungle, beach: images.beach, cave: images.cave, title: images.title };
+  const bg = bgMap[state.scene];
+  if (bg && bg.complete && bg.naturalWidth > 0) {
+    ctx.drawImage(bg, 0, 0, W, H);
+  } else {
+    ctx.fillStyle = '#112';
+    ctx.fillRect(0, 0, W, H);
+  }
+  
+  // Draw characters based on scene
+  if (state.scene === 'dock') {
+    drawMurray(175, 320);
+    if (!state.flags.mapTaken) drawMap(210, 365);
+  }
+  if (state.scene === 'tavern') {
+    drawBartender(460, 270);
+    if (!state.flags.grogTaken) drawGrog(390, 315);
+  }
+  if (state.scene === 'jungle') {
+    drawElaine(620, 290);
+    if (!state.flags.rubberChickenTaken) drawRubberChicken(330, 260);
+  }
+  if (state.scene === 'beach') {
+    if (!state.flags.chestOpened) drawChest(370, 375, false);
+    else drawChest(370, 375, true);
+  }
+  if (state.scene === 'cave') {
+    drawCauldron(480, 400);
+    drawVoodooLady(750, 370);
+  }
+  
+  // Draw Guybrush (except on title)
+  if (state.scene !== 'title' && !state.flags.gameWon) {
+    drawGuybrush(state.guybrush.x, state.guybrush.y);
+  }
+  
+  // Draw speech bubbles
+  drawSpeechBubbles();
+  
+  // Draw hotspot highlights on hover
+  if (state.hoverHotspot && !state.dialogueActive) {
+    const hs = state.hoverHotspot;
+    ctx.strokeStyle = 'rgba(255,255,0,0.3)';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(hs.x, hs.y, hs.w, hs.h);
+  }
+}
+
+function drawCharacterGlow(x, y, w, h, color) {
+  ctx.save();
+  ctx.shadowColor = color || 'rgba(255,255,255,0.3)';
+  ctx.shadowBlur = 8;
+  ctx.fillStyle = 'rgba(0,0,0,0)';
+  ctx.fillRect(x - w/2, y - h, w, h);
+  ctx.restore();
+}
+
+function drawGuybrush(x, y) {
+  const g = state.guybrush;
+  const bounce = g.walking ? Math.sin(g.walkFrame) * 3 : 0;
+  const by = y + bounce;
+  const f = g.facing;
+  
+  ctx.save();
+  ctx.translate(x, by);
+  if (f < 0) ctx.scale(-1, 1);
+  
+  // Legs (brown pants)
+  ctx.fillStyle = '#8B6914';
+  ctx.fillRect(-6, 15, 5, 18);
+  ctx.fillRect(2, 15, 5, 18);
+  if (g.walking) {
+    const legOff = Math.sin(g.walkFrame) * 4;
+    ctx.fillRect(-6, 15, 5, 18 + legOff);
+    ctx.fillRect(2, 15, 5, 18 - legOff);
+  }
+  
+  // Boots
+  ctx.fillStyle = '#3a2a0a';
+  ctx.fillRect(-7, 32, 7, 4);
+  ctx.fillRect(1, 32, 7, 4);
+  
+  // Body (white shirt)
+  ctx.fillStyle = '#eee';
+  ctx.fillRect(-8, -5, 16, 22);
+  
+  // Belt
+  ctx.fillStyle = '#5a3a0a';
+  ctx.fillRect(-8, 13, 16, 3);
+  
+  // Arms
+  ctx.fillStyle = '#eee';
+  ctx.fillRect(-12, -2, 5, 14);
+  ctx.fillRect(8, -2, 5, 14);
+  
+  // Hands (skin)
+  ctx.fillStyle = '#e8b88a';
+  ctx.fillRect(-12, 12, 5, 4);
+  ctx.fillRect(8, 12, 5, 4);
+  
+  // Head
+  ctx.fillStyle = '#e8b88a';
+  ctx.fillRect(-7, -20, 14, 16);
+  
+  // Eyes
+  ctx.fillStyle = '#000';
+  ctx.fillRect(-4, -16, 3, 3);
+  ctx.fillRect(2, -16, 3, 3);
+  
+  // Mouth
+  ctx.fillStyle = '#c0705a';
+  ctx.fillRect(-2, -10, 5, 2);
+  
+  // Blond hair / ponytail
+  ctx.fillStyle = '#FFD700';
+  ctx.fillRect(-8, -23, 16, 6);
+  ctx.fillRect(-8, -20, 3, 8);
+  ctx.fillRect(6, -20, 3, 8);
+  // Ponytail
+  ctx.fillRect(7, -20, 4, 3);
+  ctx.fillRect(9, -17, 4, 10);
+  ctx.fillRect(8, -7, 3, 5);
+  
+  // Bandana
+  ctx.fillStyle = '#d44';
+  ctx.fillRect(-8, -21, 16, 3);
+  
+  ctx.restore();
+}
+
+function drawMurray(x, y) {
+  // Barrel
+  ctx.fillStyle = '#6b4226';
+  ctx.fillRect(x - 20, y + 10, 40, 50);
+  ctx.fillStyle = '#8a5a32';
+  ctx.fillRect(x - 22, y + 15, 44, 4);
+  ctx.fillRect(x - 22, y + 40, 44, 4);
+  
+  // Skull
+  ctx.fillStyle = '#f0e8d0';
+  ctx.beginPath();
+  ctx.arc(x, y, 16, 0, Math.PI * 2);
+  ctx.fill();
+  // Jaw
+  ctx.fillRect(x - 10, y + 8, 20, 8);
+  // Eyes
+  ctx.fillStyle = '#000';
+  ctx.beginPath();
+  ctx.arc(x - 5, y - 2, 4, 0, Math.PI * 2);
+  ctx.arc(x + 5, y - 2, 4, 0, Math.PI * 2);
+  ctx.fill();
+  // Eye glow
+  ctx.fillStyle = '#f44';
+  ctx.beginPath();
+  ctx.arc(x - 5, y - 2, 2, 0, Math.PI * 2);
+  ctx.arc(x + 5, y - 2, 2, 0, Math.PI * 2);
+  ctx.fill();
+  // Teeth
+  ctx.fillStyle = '#f0e8d0';
+  for (let i = 0; i < 5; i++) {
+    ctx.fillRect(x - 8 + i * 4, y + 9, 3, 5);
+  }
+  ctx.fillStyle = '#000';
+  for (let i = 0; i < 4; i++) {
+    ctx.fillRect(x - 5 + i * 4, y + 9, 1, 5);
+  }
+}
+
+function drawMap(x, y) {
+  ctx.fillStyle = '#d4b86a';
+  ctx.fillRect(x, y, 30, 22);
+  ctx.strokeStyle = '#8a6a2a';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(x, y, 30, 22);
+  // Map details
+  ctx.strokeStyle = '#6a4a1a';
+  ctx.beginPath();
+  ctx.moveTo(x + 5, y + 8); ctx.lineTo(x + 15, y + 5); ctx.lineTo(x + 25, y + 12);
+  ctx.stroke();
+  ctx.fillStyle = '#f00';
+  ctx.fillRect(x + 20, y + 15, 4, 4);
+}
+
+function drawBartender(x, y) {
+  ctx.save();
+  ctx.translate(x, y);
+  
+  // Body (vest)
+  ctx.fillStyle = '#1a1a2e';
+  ctx.fillRect(-10, -5, 20, 25);
+  // Shirt
+  ctx.fillStyle = '#eee';
+  ctx.fillRect(-6, -3, 12, 20);
+  // Bowtie
+  ctx.fillStyle = '#d44';
+  ctx.fillRect(-4, -3, 8, 4);
+  // Head
+  ctx.fillStyle = '#c9a07a';
+  ctx.fillRect(-8, -22, 16, 18);
+  // Eyes (LED-like)
+  ctx.fillStyle = '#0ff';
+  ctx.fillRect(-5, -18, 3, 3);
+  ctx.fillRect(2, -18, 3, 3);
+  // Mouth (straight line)
+  ctx.fillStyle = '#666';
+  ctx.fillRect(-4, -11, 8, 2);
+  // Hair (neat)
+  ctx.fillStyle = '#222';
+  ctx.fillRect(-9, -24, 18, 5);
+  // Arms (holding cloth)
+  ctx.fillStyle = '#eee';
+  ctx.fillRect(-14, 0, 5, 12);
+  ctx.fillRect(10, 0, 5, 12);
+  
+  ctx.restore();
+}
+
+function drawGrog(x, y) {
+  // Mug
+  ctx.fillStyle = '#8a7a6a';
+  ctx.fillRect(x, y, 22, 18);
+  // Handle
+  ctx.strokeStyle = '#8a7a6a';
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.arc(x + 24, y + 9, 6, -Math.PI/2, Math.PI/2);
+  ctx.stroke();
+  // Liquid (glowing green)
+  ctx.fillStyle = '#4f4';
+  ctx.fillRect(x + 2, y + 4, 18, 12);
+  // Fizz
+  ctx.fillStyle = '#8f8';
+  ctx.fillRect(x + 5, y + 2, 3, 3);
+  ctx.fillRect(x + 12, y + 1, 2, 3);
+}
+
+function drawElaine(x, y) {
+  ctx.save();
+  ctx.translate(x, y);
+  
+  // Dress (formal)
+  ctx.fillStyle = '#2244aa';
+  ctx.fillRect(-10, 5, 20, 35);
+  // Gold trim
+  ctx.fillStyle = '#FFD700';
+  ctx.fillRect(-10, 5, 20, 3);
+  ctx.fillRect(-10, 37, 20, 3);
+  // Bodice
+  ctx.fillStyle = '#3355bb';
+  ctx.fillRect(-8, -5, 16, 12);
+  // Head
+  ctx.fillStyle = '#e8b88a';
+  ctx.fillRect(-7, -22, 14, 18);
+  // Eyes
+  ctx.fillStyle = '#4a4';
+  ctx.fillRect(-4, -17, 3, 3);
+  ctx.fillRect(2, -17, 3, 3);
+  // Mouth
+  ctx.fillStyle = '#c0705a';
+  ctx.fillRect(-2, -10, 5, 2);
+  // Hair (auburn)
+  ctx.fillStyle = '#c44820';
+  ctx.fillRect(-9, -25, 18, 7);
+  ctx.fillRect(-9, -20, 3, 12);
+  ctx.fillRect(7, -20, 3, 12);
+  // Crown/tiara
+  ctx.fillStyle = '#FFD700';
+  ctx.fillRect(-6, -27, 12, 3);
+  ctx.fillRect(-4, -29, 2, 3);
+  ctx.fillRect(0, -30, 2, 4);
+  ctx.fillRect(3, -29, 2, 3);
+  // Arms
+  ctx.fillStyle = '#e8b88a';
+  ctx.fillRect(-14, -2, 5, 12);
+  ctx.fillRect(10, -2, 5, 12);
+  
+  ctx.restore();
+}
+
+function drawRubberChicken(x, y) {
+  // Tree trunk
+  ctx.fillStyle = '#5a3a1a';
+  ctx.fillRect(x, y + 20, 12, 40);
+  // Leaves
+  ctx.fillStyle = '#2a7a2a';
+  ctx.beginPath();
+  ctx.arc(x + 6, y + 10, 25, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = '#3a8a3a';
+  ctx.beginPath();
+  ctx.arc(x + 12, y + 5, 18, 0, Math.PI * 2);
+  ctx.fill();
+  // Rubber chicken hanging
+  ctx.fillStyle = '#FFD700';
+  ctx.fillRect(x + 15, y + 25, 10, 15);
+  ctx.fillRect(x + 13, y + 20, 6, 8);
+  // Beak
+  ctx.fillStyle = '#ff8800';
+  ctx.fillRect(x + 11, y + 23, 4, 3);
+  // Eye
+  ctx.fillStyle = '#000';
+  ctx.fillRect(x + 15, y + 22, 2, 2);
+}
+
+function drawChest(x, y, opened) {
+  // Chest body
+  ctx.fillStyle = '#6a4a2a';
+  ctx.fillRect(x, y, 50, 30);
+  // Metal bands
+  ctx.fillStyle = '#888';
+  ctx.fillRect(x, y + 5, 50, 3);
+  ctx.fillRect(x, y + 20, 50, 3);
+  // Lid
+  if (opened) {
+    ctx.fillStyle = '#7a5a3a';
+    ctx.fillRect(x, y - 20, 50, 20);
+    ctx.fillStyle = '#888';
+    ctx.fillRect(x, y - 15, 50, 3);
+    // Empty inside
+    ctx.fillStyle = '#3a2a1a';
+    ctx.fillRect(x + 3, y + 3, 44, 12);
+  } else {
+    // Lock
+    ctx.fillStyle = '#aa0';
+    ctx.fillRect(x + 20, y + 10, 10, 10);
+    ctx.fillStyle = '#000';
+    ctx.fillRect(x + 23, y + 14, 4, 4);
+  }
+}
+
+function drawVoodooLady(x, y) {
+  ctx.save();
+  ctx.translate(x, y);
+  
+  // Robes (purple/mystical)
+  ctx.fillStyle = '#4a1a6a';
+  ctx.fillRect(-12, 5, 24, 40);
+  // Robe details
+  ctx.fillStyle = '#6a2a8a';
+  ctx.fillRect(-10, 5, 20, 3);
+  ctx.fillRect(-10, 15, 20, 2);
+  ctx.fillRect(-10, 25, 20, 2);
+  // Upper body
+  ctx.fillStyle = '#5a2a7a';
+  ctx.fillRect(-10, -8, 20, 15);
+  // Head
+  ctx.fillStyle = '#8a6a50';
+  ctx.fillRect(-7, -24, 14, 17);
+  // Eyes (mystical glow)
+  ctx.fillStyle = '#f0f';
+  ctx.fillRect(-4, -20, 3, 3);
+  ctx.fillRect(2, -20, 3, 3);
+  // Mouth
+  ctx.fillStyle = '#aa6a50';
+  ctx.fillRect(-2, -13, 5, 2);
+  // Headdress
+  ctx.fillStyle = '#8a2aaa';
+  ctx.fillRect(-10, -30, 20, 8);
+  ctx.fillStyle = '#FFD700';
+  ctx.fillRect(-8, -28, 16, 2);
+  ctx.fillRect(-3, -32, 6, 4);
+  // Arms
+  ctx.fillStyle = '#8a6a50';
+  ctx.fillRect(-16, 0, 5, 10);
+  ctx.fillRect(12, 0, 5, 10);
+  // Mystical glow
+  ctx.globalAlpha = 0.15 + Math.sin(Date.now() / 500) * 0.1;
+  ctx.fillStyle = '#f0f';
+  ctx.beginPath();
+  ctx.arc(0, 0, 30, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.globalAlpha = 1;
+  
+  ctx.restore();
+}
+
+function drawCauldron(x, y) {
+  // Cauldron body
+  ctx.fillStyle = '#2a2a2a';
+  ctx.beginPath();
+  ctx.arc(x, y + 15, 35, 0, Math.PI);
+  ctx.fill();
+  ctx.fillRect(x - 35, y, 70, 15);
+  // Rim
+  ctx.fillStyle = '#444';
+  ctx.fillRect(x - 38, y - 2, 76, 5);
+  // Legs
+  ctx.fillStyle = '#333';
+  ctx.fillRect(x - 28, y + 40, 6, 12);
+  ctx.fillRect(x + 22, y + 40, 6, 12);
+  // Bubbling liquid
+  const hue = (state.flags.usbInCauldron || state.flags.mapInCauldron || state.flags.grogInCauldron) ? 
+    (Date.now() / 20) % 360 : 120;
+  ctx.fillStyle = `hsl(${hue}, 80%, 40%)`;
+  ctx.beginPath();
+  ctx.ellipse(x, y + 5, 30, 8, 0, 0, Math.PI * 2);
+  ctx.fill();
+  // Bubbles
+  const t = Date.now() / 300;
+  for (let i = 0; i < 5; i++) {
+    const bx = x - 20 + Math.sin(t + i * 1.5) * 15;
+    const by = y + 3 - Math.abs(Math.sin(t * 0.7 + i)) * 8;
+    ctx.fillStyle = `hsla(${hue}, 80%, 60%, 0.6)`;
+    ctx.beginPath();
+    ctx.arc(bx, by, 2 + Math.sin(t + i) * 1, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  // Items count indicator
+  const count = (state.flags.usbInCauldron ? 1 : 0) + (state.flags.mapInCauldron ? 1 : 0) + (state.flags.grogInCauldron ? 1 : 0);
+  if (count > 0) {
+    ctx.fillStyle = '#ff0';
+    ctx.font = '11px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(`${count}/3 items`, x, y - 10);
+  }
+}
+
+function drawSpeechBubbles() {
+  const now = Date.now();
+  speechQueue = speechQueue.filter(s => now - s.startTime < s.duration);
+  speechQueue.forEach(s => {
+    const alpha = Math.min(1, (s.duration - (now - s.startTime)) / 500);
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.font = '600 13px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#000';
+    ctx.fillText(s.text, s.x + 1, s.y + 1);
+    ctx.fillStyle = s.color;
+    ctx.fillText(s.text, s.x, s.y);
+    ctx.restore();
+  });
+}
+
+// ---- HOTSPOT NAVIGATION WITH SCENE LINKS ----
+// Dock: path to jungle is left side, needs a cave entrance from jungle
+function getDockExtraHotspots() {
+  // Add path to cave through jungle for convenience
+  return [];
+}
+
+// Add cave entrance from jungle
+function getJungleExtraHotspots() {
+  return [{ id: 'path_cave', name: 'Path to Cave', x: 820, y: 360, w: 100, h: 60, verb: 'Walk to' }];
+}
+
+// ---- INPUT HANDLING ----
+let mouseX = 0, mouseY = 0;
+state.hoverHotspot = null;
+
+canvas.addEventListener('mousemove', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = W / rect.width;
+  const scaleY = H / rect.height;
+  mouseX = (e.clientX - rect.left) * scaleX;
+  mouseY = (e.clientY - rect.top) * scaleY;
+  
+  // Find hotspot under cursor
+  const hotspots = [...getHotspots(), ...getExtraHotspots()];
+  state.hoverHotspot = null;
+  for (const hs of hotspots) {
+    if (mouseX >= hs.x && mouseX <= hs.x + hs.w && mouseY >= hs.y && mouseY <= hs.y + hs.h) {
+      state.hoverHotspot = hs;
+      break;
+    }
+  }
+  updateActionLine();
+  
+  // Cursor style
+  if (state.hoverHotspot) {
+    canvas.style.cursor = 'pointer';
+  } else {
+    canvas.style.cursor = 'crosshair';
+  }
+});
+
+function getExtraHotspots() {
+  if (state.scene === 'jungle') return getJungleExtraHotspots();
+  return [];
+}
+
+canvas.addEventListener('click', (e) => {
+  if (state.transitioning || state.flags.gameWon) return;
+  if (state.dialogueActive) return;
+  
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = W / rect.width;
+  const scaleY = H / rect.height;
+  const cx = (e.clientX - rect.left) * scaleX;
+  const cy = (e.clientY - rect.top) * scaleY;
+  
+  const hotspots = [...getHotspots(), ...getExtraHotspots()];
+  let clicked = null;
+  for (const hs of hotspots) {
+    if (cx >= hs.x && cx <= hs.x + hs.w && cy >= hs.y && cy <= hs.y + hs.h) {
+      clicked = hs;
+      break;
+    }
+  }
+  
+  if (clicked) {
+    // Walk to hotspot first, then perform action
+    const targetX = clicked.x + clicked.w / 2;
+    const targetY = Math.min(clicked.y + clicked.h, GAME_AREA_BOTTOM - 20);
+    
+    if (state.verb === 'Walk to' && (clicked.id.startsWith('path_'))) {
+      handleHotspot(clicked, 'Walk to');
+    } else {
+      // Walk near the hotspot, then do action
+      walkTo(targetX, targetY);
+      setTimeout(() => {
+        handleHotspot(clicked, state.verb);
+      }, 300);
+    }
+    playClickSFX();
+  } else {
+    // Walk to clicked position
+    if (cy > GAME_AREA_TOP && cy < GAME_AREA_BOTTOM) {
+      walkTo(cx, cy);
+      playClickSFX();
+    }
+  }
+});
+
+// Right-click for default verb
+canvas.addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+  if (state.transitioning || state.flags.gameWon || state.dialogueActive) return;
+  
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = W / rect.width;
+  const scaleY = H / rect.height;
+  const cx = (e.clientX - rect.left) * scaleX;
+  const cy = (e.clientY - rect.top) * scaleY;
+  
+  const hotspots = [...getHotspots(), ...getExtraHotspots()];
+  for (const hs of hotspots) {
+    if (cx >= hs.x && cx <= hs.x + hs.w && cy >= hs.y && cy <= hs.y + hs.h) {
+      const defaultVerb = DEFAULT_VERBS[hs.id] || 'Walk to';
+      state.verb = defaultVerb;
+      updateVerbBar();
+      
+      const targetX = hs.x + hs.w / 2;
+      const targetY = Math.min(hs.y + hs.h, GAME_AREA_BOTTOM - 20);
+      
+      if (defaultVerb === 'Walk to' && hs.id.startsWith('path_')) {
+        handleHotspot(hs, 'Walk to');
+      } else {
+        walkTo(targetX, targetY);
+        setTimeout(() => handleHotspot(hs, defaultVerb), 300);
+      }
+      playClickSFX();
+      return;
+    }
+  }
+});
+
+// ---- TITLE SCREEN ----
+titleOverlay.addEventListener('click', () => {
+  initAudio();
+  if (audioCtx) audioCtx.resume();
+  startMusic();
+  titleOverlay.style.display = 'none';
+  state.scene = 'dock';
+  state.guybrush.x = 480;
+  state.guybrush.y = 380;
+  state.guybrush.targetX = 480;
+  state.guybrush.targetY = 380;
+  enterScene('dock');
+  showNarrator("Welcome to Monkey AIsland! This entire game was generated by AI, which means there's a 73.2% chance everything works correctly. That statistic was also generated by AI.", 7000);
+});
+
+// ---- DEBUG OVERLAY ----
+let _frames = 0, _last = performance.now(), _fps = 0;
+function updateDebug() {
+  _frames++;
+  const n = performance.now();
+  if (n - _last >= 1000) {
+    _fps = (_frames * 1000) / (n - _last);
+    _frames = 0;
+    _last = n;
+    debugOverlay.textContent = `FPS:${_fps.toFixed(0)} Scene:${state.scene} Inv:${state.inventory.length}`;
+  }
+}
+
+// ---- GAME LOOP ----
+let lastTime = 0;
+
+function gameLoop(timestamp) {
+  const dt = Math.min((timestamp - lastTime) / 1000, 0.1);
+  lastTime = timestamp;
+  
+  // Update
+  if (state.scene !== 'title') {
+    updateGuybrush(dt);
+  }
+  
+  // Draw
+  ctx.clearRect(0, 0, W, H);
+  drawScene();
+  
+  // Debug
+  updateDebug();
+  
+  requestAnimationFrame(gameLoop);
+}
+
+requestAnimationFrame(gameLoop);
+
+// ---- render_game_to_text for testing ----
+window.render_game_to_text = function() {
+  return JSON.stringify({
+    scene: state.scene,
+    verb: state.verb,
+    inventory: state.inventory,
+    guybrush: { x: Math.round(state.guybrush.x), y: Math.round(state.guybrush.y), walking: state.guybrush.walking },
+    flags: state.flags,
+    dialogueActive: state.dialogueActive,
+    hotspots: getHotspots().map(h => ({ id: h.id, name: h.name, x: h.x, y: h.y, w: h.w, h: h.h })),
+    narratorVisible: narratorEl.classList.contains('show'),
+    narratorText: narratorEl.textContent,
+    gameWon: state.flags.gameWon
+  });
+};
+
+// ---- advanceTime for testing ----
+window.advanceTime = function(ms) {
+  const steps = Math.max(1, Math.round(ms / (1000 / 60)));
+  for (let i = 0; i < steps; i++) {
+    updateGuybrush(1/60);
+  }
+  ctx.clearRect(0, 0, W, H);
+  drawScene();
+  updateDebug();
+};
+
+// Wait for all images to load before showing title
+function waitForImages() {
+  const imgs = Object.values(images);
+  let loaded = 0;
+  const total = imgs.length;
+  
+  function checkLoaded() {
+    loaded++;
+    // Update loading text on canvas
+    ctx.fillStyle = '#112';
+    ctx.fillRect(0, 0, W, H);
+    ctx.font = '600 16px "Press Start 2P", monospace';
+    ctx.fillStyle = '#ff8800';
+    ctx.textAlign = 'center';
+    ctx.fillText('MONKEY AISLAND', W/2, H/2 - 30);
+    ctx.font = '400 12px Inter, sans-serif';
+    ctx.fillStyle = '#888';
+    ctx.fillText('Loading... ' + loaded + '/' + total, W/2, H/2 + 10);
+    
+    if (loaded >= total) {
+      // All images loaded, show narrator
+      setTimeout(() => {
+        showNarrator("Welcome to Monkey AIsland! This entire game was generated by AI, which means there's a 73.2% chance everything works correctly. That statistic was also generated by AI.", 10000);
+      }, 500);
+    }
+  }
+  
+  imgs.forEach(img => {
+    if (img.complete && img.naturalWidth > 0) {
+      checkLoaded();
+    } else {
+      img.addEventListener('load', checkLoaded);
+      img.addEventListener('error', checkLoaded);
+    }
+  });
+}
+
+waitForImages();
+
+})();
+</script>
+</body>
+</html>
