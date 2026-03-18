@@ -14,11 +14,7 @@ The premise is straightforward. Beginning in March 2026, a generative AI system 
 
 The choice of Monkey Island as the reference point is deliberate. A point-and-click adventure is one of the most compositionally demanding game formats to produce. It requires competence across every creative discipline simultaneously: visual art (backgrounds, character sprites, animation), narrative design (branching dialogue, world-building, humour), game design (puzzle logic, inventory systems, state management), audio (music composition, adaptive scoring, voice acting), and software engineering (rendering, input handling, scene management). Every element must be authored and integrated. This makes it an intellectually compelling stress test for a generative system's breadth.
 
-### Why This Format
-
-The original Monkey Island took a team approximately nine months to produce, including design, art, programming, music, and testing. The game was the output of a deep pipeline of human expertise: Gilbert's SCUMM engine and design philosophy refined across multiple shipped titles, artists trained in the specific constraints of pixel art of the time, musicians who understood the limitations of audio playback circa 1990, and programmers who had built cross-platform tooling on state-of-art workstations.
-
-Asking a generative AI to produce an equivalent in a single session is, by any reasonable measure, an unfair comparison. That is precisely the point; unfair comparisons are sometimes the most important kind. The experiment does not ask whether AI can match a team of humans working for almost a year. It asks how close it can get in a fraction of the time, and whether that distance shrinks year over year, generation to generation.
+The original Monkey Island took a team approximately nine months to produce, including design, art, programming, music, and testing. The game was the output of a deep pipeline of human expertise. Asking a generative AI to produce an equivalent in a single session is, by any reasonable measure, an unfair comparison. Yet that is precisely the point; unfair comparisons are sometimes the most important kind. This experiment does not ask whether AI can match a team of humans working for almost a year. It asks how close it can get in a fraction of the time, and whether that distance shrinks year over year, generation to generation.
 
 ---
 
