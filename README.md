@@ -67,7 +67,7 @@ Broad competence across every required discipline. No single discipline absent. 
 
 ## Methodology
 
-To maintain consistency across years, the following protocol will be observed for each generation:
+To maintain consistency across time, the following protocol will be observed for each generation:
 
 1. The same creative brief will be used, verbatim - no modifications, no added context, no hints from prior generations.
 2. The game will be produced using a generally available AI system at the time, in a single conversational session.
@@ -78,7 +78,7 @@ To maintain consistency across years, the following protocol will be observed fo
 
 ### Evaluation Dimensions
 
-Each annual generation will be assessed against the following dimensions, scored qualitatively to track progression over time:
+Each generation will be assessed against the following dimensions, scored qualitatively to track progression over time:
 
 | Dimension | What It Measures | 2026 |
 |---|---|:---:|
