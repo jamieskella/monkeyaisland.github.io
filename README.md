@@ -6,6 +6,22 @@
 
 ---
 
+## The Experiment
+
+**Monkey AIsland** is not merely a nostalgia project. It is a repeatable experiment designed to measure the capability of generative AI systems in the domain of game creation, conducted anually (or on a shorter cadence based on significant frontier model updates) against a fixed creative brief, with a maximum of 3 follow-up prompts to correct any glaring issues that were overlooked by the initial generation. 
+
+The premise is straightforward. Beginning in March 2026, a generative AI system is given the same brief: produce a complete, playable point-and-click adventure game as a spiritual (and explicitly unofficial) successor to *The Secret of Monkey Island*. The game must include original characters, backgrounds, animations, music, script, audibly voice acted dialogue, and a functioning puzzle chain. It must be narratively self-aware, breaking the fourth wall to acknowledge and satirise its own AI-generated nature. It is called "Monkey AIsland".
+
+The choice of Monkey Island as the reference point is deliberate. A point-and-click adventure is one of the most compositionally demanding game formats to produce. It requires competence across every creative discipline simultaneously: visual art (backgrounds, character sprites, animation), narrative design (branching dialogue, world-building, humour), game design (puzzle logic, inventory systems, state management), audio (music composition, adaptive scoring, voice acting), and software engineering (rendering, input handling, scene management). Every element must be authored and integrated. This makes it an intellectually compelling stress test for a generative system's breadth.
+
+### Why This Format
+
+The original Monkey Island took a team of seasoned professionals at one of the most technically advanced studios in the world approximately two years to produce, including design, art, programming, music, and testing. It drew on an engine (SCUMM) that had been iterated over four prior titles across three years of institutional learning. The game was the output of a deep pipeline of human expertise: Gilbert's design philosophy refined across multiple shipped titles, artists trained in the specific constraints of EGA/VGA pixel art, musicians who understood the limitations of MIDI playback, and programmers who had built cross-platform tooling on Sun workstations before personal computers were powerful enough to do the same.
+
+Asking a generative AI to produce an equivalent in a single session is, by any reasonable measure, an unfair comparison. That is precisely the point. The experiment does not ask whether AI can match a team of humans working for two years. It asks how close it can get in a fraction of the time, and whether that distance shrinks year over year, generation to generation.
+
+---
+
 ## Why Monkey Island Matters
 
 In October 1990, Lucasfilm Games - an experimental studio funded by George Lucas, working out of Skywalker Ranch - released *The Secret of Monkey Island*. It redefined the genre, and redefined what interactive storytelling could be.
@@ -23,22 +39,6 @@ The final star in this constellation was not technical in nature, it was its und
 This was a direct challenge to the prevailing school of design, led by Sierra On-Line, where death was frequent, saves were essential, and pixel-hunting was a feature. Gilbert's position was radical: if you designed as though save games didn't exist, you would be forced to make a better game. Monkey Island was the proof. Its verb-based interface streamlined player interaction by reducing the verb panel from Maniac Mansion's 15 verbs down to as few as 9, while introducing smart click-defaults — clicking directly on a character would automatically invoke "Talk to," clicking on a door would invoke "Open," reducing the need to manually select verbs from the panel for common interactions. The verb wall itself remained, but its friction was dramatically reduced. These refinements seem obvious now. In 1990, they were revelatory.
 
 To speak of a pre-Monkey Island and post-Monkey Island era of video games, as the digital historian Jimmy Maher has observed, would not be at all out of order. Designers at other studios, from Sierra's Corey Cole to Legend Entertainment's Bob Bates, cite it unprompted as a work that fundamentally changed their approach to design. The SCUMM engine went on to power twelve LucasArts titles over a decade, and its philosophy of separating scripting from rendering anticipated the architecture of modern game engines by years.
-
----
-
-## The Experiment
-
-**Monkey AIsland** is not merely a nostalgia project. It is a repeatable experiment designed to measure the capability of generative AI systems in the domain of game creation, conducted anually (or on a shorter cadence based on significant frontier model updates) against a fixed creative brief, with a maximum of 3 follow-up prompts to correct any glaring issues that were overlooked by the initial generation. 
-
-The premise is straightforward. Beginning in March 2026, a single generative AI system is given the same brief: produce a complete, playable point-and-click adventure game as a spiritual (and explicitly unofficial) successor to *The Secret of Monkey Island*. The game must include original characters, backgrounds, animations, music, script, audibly voice acted dialogue, and a functioning puzzle chain. It must be narratively self-aware, breaking the fourth wall to acknowledge and satirise its own AI-generated nature. It is called "Monkey AIsland".
-
-The choice of Monkey Island as the reference point is deliberate. A point-and-click adventure is one of the most compositionally demanding game formats to produce. It requires competence across every creative discipline simultaneously: visual art (backgrounds, character sprites, animation), narrative design (branching dialogue, world-building, humour), game design (puzzle logic, inventory systems, state management), audio (music composition, adaptive scoring, voice acting), and software engineering (rendering, input handling, scene management). There is no faking it with procedural generation or emergent systems. Every element must be authored. This makes it an intellectually compelling stress test for a generative system's breadth.
-
-### Why This Format
-
-The original Monkey Island took a team of seasoned professionals at one of the most technically advanced studios in the world approximately two years to produce, including design, art, programming, music, and testing. It drew on an engine (SCUMM) that had been iterated over four prior titles across three years of institutional learning. The game was the output of a deep pipeline of human expertise: Gilbert's design philosophy refined across multiple shipped titles, artists trained in the specific constraints of EGA/VGA pixel art, musicians who understood the limitations of MIDI playback, and programmers who had built cross-platform tooling on Sun workstations before personal computers were powerful enough to do the same.
-
-Asking a generative AI to produce an equivalent in a single session is, by any reasonable measure, an unfair comparison. That is precisely the point. The experiment does not ask whether AI can match a team of humans working for two years. It asks how close it can get in a fraction of the time, and whether that distance shrinks year over year, generation to generation.
 
 ---
 
