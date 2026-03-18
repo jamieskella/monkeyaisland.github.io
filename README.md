@@ -80,7 +80,7 @@ To maintain consistency across time, the following protocol will be observed for
 
 Each generation will be assessed against the following dimensions, scored qualitatively to track progression over time:
 
-| Dimension | What It Measures | 2026 |
+| Dimension | What It Measures | March 2026 |
 |---|---|:---:|
 | **Visual Art** | Quality, consistency, and intentionality of backgrounds, characters, and animation | Functional |
 | **Narrative Design** | Dialogue quality, comedic timing, world-building, fourth-wall execution | Competent |
