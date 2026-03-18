@@ -8,7 +8,7 @@ A Generative AI Capability Benchmark — Framed Through the Technical Legacy of 
 **First Generation:** March 2026
 **Platform:** Perplexity Computer
 
-**v1 March 2026:** [http://monkeyaisland.com/v1-2026/](http://monkeyaisland.com/v1-2026/)
+- **v1 March 2026:** [http://monkeyaisland.com/v1-2026/](http://monkeyaisland.com/v1-2026/)
 
 ---
 
