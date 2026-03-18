@@ -8,7 +8,7 @@
 
 ## The Experiment
 
-**Monkey AIsland** is not merely a nostalgia project. It is a repeatable experiment designed to measure the capability of generative AI systems in the domain of game creation, conducted anually (or on a shorter cadence based on significant frontier model updates) against a fixed creative brief, with a maximum of 3 follow-up prompts to correct any glaring issues that were overlooked by the initial generation. 
+**Monkey AIsland** is not merely a nostalgia project. It is a repeatable experiment designed to measure the capability of generative AI systems in the domain of game creation, conducted anually (or on a shorter cadence based on significant frontier model updates) against a fixed creative brief. Each output will benefit from a maximum of 3 follow-up prompts to correct any glaring issues that were overlooked by the initial generation.
 
 The premise is straightforward. Beginning in March 2026, a generative AI system is given the same brief: produce a complete, playable point-and-click adventure game as a spiritual (and explicitly unofficial) successor to *The Secret of Monkey Island*. The game must include original characters, backgrounds, animations, music, script, audibly voice acted dialogue, and a functioning puzzle chain. It must be narratively self-aware, breaking the fourth wall to acknowledge and satirise its own AI-generated nature. It is called "Monkey AIsland".
 
