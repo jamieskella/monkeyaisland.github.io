@@ -10,7 +10,7 @@
 
 I recently wrapped up a contract, consulting with a startup who are building GenAI tech in the video game space. Around that same time, my daughter of seven years old had become vocal about a desire to start making her own video games. She's now set up with a Steam Deck on an external monitor, using Linux desktop to bring her ideas to life with GDevelop. This intersection of happenstance got me thinking, subconsciously at first and overly later, about what my daughter's life might look like if she chose to pursue this career path, amidst the rise of generative AI. Will an artist have the most longegity or highest demand? What about musician? Writer? Engineer? Or is it a case that each creative mind becomes nine-tenths of an indie studio, who can do much of all required to realise their ideas, thanks to new tooling? If that, then when might the tools be good enough to ingest ideas, specifications, assets... and generate games of the quality players expect?
 
-**Enter Monkey AIsland**. This is not a nostalgia project. This is a repeatable experiment designed to measure the capability of generative AI systems in the domain of game creation, run whenever frontier models receive meaningful updates and anchored to a fixed creative brief. Each output is allowed a maximum of three follow-up prompts to correct any glaring issues the initial generation missed.
+**Enter Monkey AIsland**. This is not a nostalgia project. This is not a commentary on whether AI should or shouldn't be used in game development. It's a measurement of whether it *can* (that distinction is critical); it's is a repeatable experiment designed to measure the capability of generative AI systems in the domain of game creation, run whenever frontier models receive meaningful updates and anchored to a fixed creative brief. Each output is allowed a maximum of three follow-up prompts to correct any glaring issues the initial generation missed.
 
 The premise is straightforward. Beginning in March 2026, a generative AI system is given a prompt detailing an idea (with a reasonable assumption it could do even better using a prompt which resembled clear specification): produce a complete, playable point-and-click adventure game as a spiritual - and explicitly unofficial - successor to *The Secret of Monkey Island*. The game must include original characters, backgrounds, animations, music, script, audibly voice-acted dialogue, and a functioning puzzle chain. It must be narratively self-aware, breaking the fourth wall to acknowledge and satirise its own AI-generated nature. It is called "Monkey AIsland".
 
@@ -91,18 +91,6 @@ Each generation will be assessed against the following dimensions, scored qualit
 | **Creative Coherence** | Whether all elements feel like they belong to the same game world | Good |
 
 This isn't intended to be a rigorous scientific instrument - it's a structured observation framework. The value isn't in any individual score but in the delta between generations.
-
----
-
-## The State of AI in Game Development
-
-This experiment sits within a rapidly shifting industry context. As of early 2026, the relationship between generative AI and game development is, to put it mildly, contested.
-
-The GDC 2026 State of the Game Industry Report found that 52% of game industry professionals now view generative AI as negatively impacting the industry, up from 30% in 2025 and 18% in 2024. At the same time, 36% report using AI tools in their daily work - primarily for research, coding assistance, and prototyping rather than final creative assets. BCG's 2026 Video Gaming Report estimates that roughly 50% of studios are now using AI in some capacity, and around 20% of new games on Steam disclosed AI use by mid-2025, a figure that climbed to 22% of all 2025 releases. The AI and Games newsletter tracked over 4,300 AI-tagged games on Steam by end of 2025 - a 4,750% increase since Steam began monitoring AI disclosures in 2023.
-
-The tension is real. Studios are adopting AI for efficiency and prototyping while the creative community pushes back against its use in player-facing content. The strongest opposition comes from those closest to the work: 64% of visual and technical artists, 63% of game designers and narrative developers, and 59% of programmers report negative views, according to GDC 2026 data. As AI and Games commentator Tommy Thompson has noted, the industry needs to demonstrate meaningful use cases that deliver value to players rather than simply reducing headcount.
-
-Monkey AIsland is not a commentary on whether AI should or shouldn't be used in game development. It's a measurement of whether it *can*. 
 
 ---
 
