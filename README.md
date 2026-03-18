@@ -1,8 +1,6 @@
-# Monkey AIsland
+# Monkey AIsland: The Hallucination of Monkey Island
 
-**The Hallucination of Monkey Island**
-
-A Generative AI Capability Benchmark — Framed Through the Technical Legacy of *The Secret of Monkey Island* (1990)
+**A Generative AI Capability Benchmark — Framed Through the Technical Legacy of *The Secret of Monkey Island* (1990)**
 
 **Author:** Jamie Skella 
 **First Generation:** March 2026
