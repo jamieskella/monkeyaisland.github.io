@@ -69,12 +69,12 @@ Broad competence across every required discipline. No single discipline absent. 
 
 ---
 
-## Annual Methodology
+## Methodology
 
-To maintain consistency across years, the following protocol will be observed for each annual generation:
+To maintain consistency across years, the following protocol will be observed for each generation:
 
-1. The same creative brief will be used each year, verbatim - no modifications, no added context, no hints from prior generations.
-2. The game will be produced using the most capable generally available AI system at the time, in a single conversational session.
+1. The same creative brief will be used, verbatim - no modifications, no added context, no hints from prior generations.
+2. The game will be produced using a generally available AI system at the time, in a single conversational session.
 3. No pre-written code, assets, templates, or reference material will be supplied. The system starts from the prompt alone.
 4. The output will be deployed as a publicly accessible web application.
 5. Each generation will be preserved in its original form alongside this document, creating a longitudinal record.
@@ -106,7 +106,7 @@ The GDC 2026 State of the Game Industry Report found that 52% of game industry p
 
 The tension is real. Studios are adopting AI for efficiency and prototyping while the creative community pushes back against its use in player-facing content. The strongest opposition comes from those closest to the work: 64% of visual and technical artists, 63% of game designers and narrative developers, and 59% of programmers report negative views, according to GDC 2026 data. As AI and Games commentator Tommy Thompson has noted, the industry needs to demonstrate meaningful use cases that deliver value to players rather than simply reducing headcount.
 
-Monkey AIsland is not a commentary on whether AI should or shouldn't be used in game development. It's a measurement of whether it *can*. The distinction matters.
+Monkey AIsland is not a commentary on whether AI should or shouldn't be used in game development. It's a measurement of whether it *can*. 
 
 ---
 
@@ -114,11 +114,11 @@ Monkey AIsland is not a commentary on whether AI should or shouldn't be used in 
 
 The original *Secret of Monkey Island* endures not because of its pixel art or its MIDI soundtrack but because every element serves a unified creative vision. The puzzles reinforce the narrative. The humour emerges from the mechanics, not just the dialogue. The interface disappears into the experience. This is what Gilbert meant when he argued that a game should make the player forget they're solving puzzles and simply feel immersed in a world.
 
-Whether a generative AI can achieve that kind of holistic creative integration - not just produce all the individual parts but make them *cohere* - is the real question this experiment tracks. The first generation demonstrates breadth. The question for subsequent generations is depth. Can the puzzle design develop the layered elegance of the original? Can the script sustain comedic rhythm across an entire playthrough? Can the music respond dynamically to player behaviour in the tradition of iMUSE? Can the game feel like it was *designed*, not just *generated*?
+Whether a generative AI can achieve that kind of holistic creative integration - not just produce all the individual parts but make them *cohere* - is the real question this experiment tracks. The first generation demonstrates breadth. The question for subsequent generations is depth. Can the puzzle design develop the layered elegance of the original? Can the script sustain comedic rhythm across an entire playthrough? Can the music respond dynamically to player behaviour in the tradition of iMUSE (Monkey Island 2)? Can the game feel like it was *designed*, not just *generated*?
 
-In 1990, it took a team of dedicated professionals nine months and a custom engine refined across four prior titles to produce a game that would go on to be named among the greatest ever made. In 2026, a generative AI produced a fully voice-acted, playable, self-aware spiritual successor in a single session. The gap between the two is vast. Whether it narrows is what we're here to find out.
+In 1990, it took a team of dedicated professionals nine months and a custom engine refined across four prior titles to produce a game that would go on to be named among the greatest ever made. In 2026, a generative AI produced a fully voice-acted, playable, self-aware spiritual successor in a single session. The gap between the two is vast. How far it narrows is what we'll find out.
 
-This document will grow each year with a new section recording the next generation - its capabilities, its limitations, and the distance that remains. Monkey AIsland is, in that sense, both a game and a measuring stick: built in tribute to one of the most important games ever made, and rebuilt annually to track the machines that are learning to make them.
+This document will grow each year with a new section recording the next generation - its capabilities, its limitations, and the distance that remains. Monkey AIsland is, in that sense, both a game and a measuring stick: built in tribute to one of the most important games ever made, and rebuilt periodically by GenAI to track the progress of the machines that are learning to make them.
 
 ---
 
