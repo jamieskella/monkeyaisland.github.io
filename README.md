@@ -1,6 +1,6 @@
 # Monkey AIsland: The Hallucination of Monkey Island
 
-**A Generative AI Capability Benchmark by [https://www.linkedin.com/in/jamieskella/](Jamie Skella) — Framed Through the Technical Legacy of *The Secret of Monkey Island* (1990)**
+**A Generative AI Capability Benchmark by [Jamie Skella](https://www.linkedin.com/in/jamieskella/) — Framed Through the Technical Legacy of *The Secret of Monkey Island* (1990)**
 
 - **v1 March 2026:** (First generation, Perplexity Computer) [http://monkeyaisland.com/v1-2026/](http://monkeyaisland.com/v1-2026/)
 
