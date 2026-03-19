@@ -57,7 +57,7 @@ The system generated a complete, browser-based point-and-click adventure game wi
 
 The result is a playable game - not a tech demo, not a proof of concept, but a game with a beginning, middle, and end. A player can walk between scenes, talk to characters, collect items, solve puzzles in sequence, and reach a victory state. The verb bar works. The inventory works. The music plays. Every character speaks with a distinct voice. Characters say things that are, occasionally, genuinely funny.
 
-It is also, by any honest accounting, not in the same category as the 1990 original. The pixel art backgrounds, while atmospheric and stylistically coherent, lack the hand-crafted intentionality of the original's art direction. The character animations are rudimentary. The puzzle design, while functional, lacks the layered elegance of Gilbert's work - the kind where solutions make you think "why didn't I see that sooner" rather than simply clearing a logical gate. The music captures the genre but not the melodic specificity of a Michael Land composition. The voice acting gives each character audible personality but doesn't approach the nuanced performance direction of professional actors like Dominic Armato, whose portrayal of Guybrush Threepwood in *The Curse of Monkey Island* set a standard these AI voices don't reach. The script is witty in places but doesn't sustain the comedic rhythm that made the original's writing exceptional across hours of play.
+It is also, by any honest accounting, not in the same category as the 1990 original. The pixel art backgrounds, while atmospheric and stylistically coherent, lack the hand-crafted intentionality of the original's art direction. The character sprites don't feel coherent with the game world and the animations are rudimentary. The puzzle design, while functional, is not compelling. The music is barely that, it couldn't be further away from a Michael Land composition. The voice acting gives each character audible personality but doesn't approach the nuanced performance direction of professional actors like Dominic Armato, whose portrayal of Guybrush Threepwood in *The Curse of Monkey Island* set a standard these AI voices don't nearly reach. The script is witty in places but doesn't sustain the comedic rhythm that made the original's writing exceptional across hours of play.
 
 None of this is surprising. What is worth noting is what the system *did* manage to produce without explicit instruction. It chose an appropriate engine architecture (canvas with DOM overlays). It selected a verb set that maps closely to the original. It designed a puzzle dependency chain that requires multi-step thinking. It generated procedural audio rather than trying to source external music files. It cast six distinct synthetic voices across 78 dialogue lines and built an audio engine to synchronise voice playback with text display. It wrote dialogue that is self-referentially aware in a structurally consistent way - not merely random. It built the whole thing as a deployable web application.
 
@@ -82,13 +82,14 @@ Each generation will be assessed against the following dimensions, scored qualit
 
 | Dimension | What It Measures | March 2026 |
 |---|---|:---:|
-| **Visual Art** | Quality, consistency, and intentionality of backgrounds, characters, and animation | Functional |
+| **Visual Art** | Quality, consistency, and intentionality of backgrounds, characters, and animation | Basic |
 | **Narrative Design** | Dialogue quality, comedic timing, world-building, fourth-wall execution | Competent |
 | **Puzzle Design** | Logical elegance, multi-step complexity, player guidance, fairness | Basic |
-| **Audio** | Musical quality, voice acting, adaptive behaviour, thematic appropriateness | Competent |
-| **Engineering** | Code architecture, performance, deployment, cross-browser support | Strong |
+| **Audio** | Musical quality, adaptive behaviour, thematic appropriateness | Basic |
+| **Voice acting** | Comedic timing, emotional nuance, alignment with narrative tone  | Basic |
+| **Engineering** | Code architecture, performance, deployment, cross-browser support | Competent |
 | **Game Feel** | Responsiveness, polish, the intangible sense that the game "works" | Acceptable |
-| **Creative Coherence** | Whether all elements feel like they belong to the same game world | Good |
+| **Creative Coherence** | Whether all elements feel like they belong to the same game world | Basic |
 
 This isn't intended to be a rigorous scientific instrument - it's a structured observation framework. The value isn't in any individual score but in the delta between generations.
 
