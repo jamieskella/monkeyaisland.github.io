@@ -119,3 +119,5 @@ Whether a generative AI can achieve that kind of holistic creative integration -
 In 1990, it took a team of dedicated professionals nine months and a custom engine refined across four prior titles to produce a game that would go on to be named among the greatest ever made. In 2026, a generative AI produced a fully voice-acted, playable, self-aware spiritual successor in a single session. The gap between the two is vast. How far it narrows is what we'll find out.
 
 This document will grow with each new AI generation, with a new section recording its capabilities, its limitations, and the distance that remains. Monkey AIsland is, in that sense, both a game and a measuring stick: built in tribute to one of the most important games ever made, and rebuilt periodically by GenAI to track the progress of the machines that are learning to make them.
+
+GitHub repo: [https://github.com/jamieskella/monkeyaisland.github.io](https://github.com/jamieskella/monkeyaisland.github.io/)
