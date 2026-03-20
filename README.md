@@ -72,9 +72,9 @@ The system generated a complete, browser-based point-and-click adventure game wi
 
 ### Observations
 
-The result is a playable game - not a tech demo, not a proof of concept, but a game with a beginning, middle, and end. A player can walk between scenes, talk to characters, collect items, solve puzzles in sequence, and reach a victory state. The verb bar works. The inventory works. The music plays. Every character speaks with a distinct voice. Characters say things that are, very occasionally, genuinely funny. Props to GenAI for weaving in rubber chickens and melting jugs of grog - tidy little hat-tips to the original game.
+The result is a playable game - a game with a beginning, middle, and end. Is it good? By measure of any gamer or any honest accounting, not at all. Yet let's remember that it was only a couple short years ago that AI image generation was producing human hands with six fingers. We are moving fast. Despite the fact it's not objectively good, from a generative systems perspective it is still an impressive output. A player can walk between scenes, talk to characters, collect items, solve puzzles in sequence, and reach a victory state. The verb bar works. The inventory works. The music plays. Every character speaks with a distinct voice. Characters say things that are, very occasionally, genuinely funny. Props to GenAI for weaving in rubber chickens and melting jugs of grog - tidy little hat-tips to the original game.
 
-It is also, by any honest accounting, not in the same category as the 1990 original. The pixel art backgrounds, while atmospheric and stylistically coherent, lack the hand-crafted intentionality of the original's art direction. The character sprites don't feel coherent with the game world and the animations are rudimentary. The puzzle design, while functional, is not compelling. The music is barely that, it couldn't be further away from a Michael Land composition. The voice acting gives each character audible personality but doesn't approach the nuanced performance direction of professional actors like Dominic Armato, whose portrayal of Guybrush Threepwood in *The Curse of Monkey Island* set a standard these AI voices don't nearly reach. The script is witty in places but doesn't sustain the comedic rhythm that made the original's writing exceptional across hours of play.
+It is simply not nearly in the same category as the 1990 original. The pixel art backgrounds are incoherent and lack the hand-crafted intentionality. The character sprites don't feel coherent with the game world and the animations are rudimentary. The puzzle design, while functional, is not compelling. The music is barely music, it couldn't be further away from a Michael Land composition. The voice acting gives each character audible personality but is jarring and awkward - it doesn't approach the nuanced performance direction of professional actors like Dominic Armato, whose portrayal of Guybrush Threepwood in *The Curse of Monkey Island* set a standard these AI voices don't even nearly reach. The script is witty in places but it's hollow, the arc is weak and it doesn't sustain the comedic rhythm that made the original's writing exceptional across hours of play.
 
 None of this is surprising. What is worth noting is what the system *did* manage to produce without explicit instruction. It chose an appropriate engine architecture (canvas with DOM overlays). It selected a verb set that maps closely to the original. It designed a puzzle dependency chain that requires multi-step thinking. It generated procedural audio rather than trying to source external music files. It cast six distinct synthetic voices across 78 dialogue lines and built an audio engine to synchronise voice playback with text display. It wrote dialogue that is self-referentially aware in a structurally consistent way - not merely random. It built the whole thing as a deployable web application.
 
@@ -100,12 +100,12 @@ Each generation will be assessed against the following dimensions, scored qualit
 | Dimension | What It Measures | March 2026 |
 |---|---|:---:|
 | **Visual Art** | Quality, consistency, and intentionality of backgrounds, characters, and animation | Basic |
-| **Narrative Design** | Dialogue quality, comedic timing, world-building, fourth-wall execution | Competent |
+| **Narrative Design** | Dialogue quality, comedic timing, world-building, fourth-wall execution | Basic |
 | **Puzzle Design** | Logical elegance, multi-step complexity, player guidance, fairness | Basic |
 | **Audio** | Musical quality, adaptive behaviour, thematic appropriateness | Basic |
 | **Voice acting** | Comedic timing, emotional nuance, alignment with narrative tone  | Basic |
 | **Engineering** | Code architecture, performance, deployment, cross-browser support | Competent |
-| **Game Feel** | Responsiveness, polish, the intangible sense that the game "works" | Acceptable |
+| **Game Feel** | Responsiveness and the sense that the game "works" | Acceptable |
 | **Creative Coherence** | Whether all elements feel like they belong to the same game world | Basic |
 
 This isn't intended to be a rigorous scientific instrument - it's a structured observation framework. The value isn't in any individual score but in the delta between generations.
