@@ -64,10 +64,10 @@ The system generated a complete, browser-based point-and-click adventure game wi
 | **Scenes** | Six fully illustrated backgrounds: title screen, harbour dock, SCUMM Bar tavern, jungle path, moonlit beach, voodoo cave. Each rendered in pixel art style via AI image generation. |
 | **Characters** | Five distinct NPCs with unique sprites, dialogue trees, and personality: Guybrush Promptwood (protagonist), Murray the Skull, ChatGPeeTee (bartender), Governor Elaine Markup, and MidJourney (Voodoo Lady). |
 | **Interface** | Classic SCUMM-style verb bar with nine verbs (Walk to, Look at, Pick up, Use, Talk to, Give, Push, Pull, Open), inventory management, and context-sensitive interaction. |
-| **Puzzles** | A complete six-item puzzle chain requiring item collection, combination, and NPC interaction across all scenes, culminating in a voodoo ritual victory condition. |
+| **Puzzles** | A complete multi-item puzzle chain requiring item collection, combination, and NPC interaction across all scenes, culminating in a voodoo ritual victory condition. |
 | **Voice Acting** | 78 individually generated voice lines across six distinct characters, each with a unique ElevenLabs voice. Guybrush Promptwood speaks his dialogue choices aloud before NPCs respond. A narrator provides voiced scene descriptions, item examinations, and action feedback. Voice playback is synchronised with text display timing. |
-| **Music** | Procedural Caribbean/calypso soundtrack generated in real time via the Web Audio API. No pre-recorded audio files. |
-| **Script** | Branching dialogue with fourth-wall-breaking humour throughout. Characters acknowledge and mock their AI-generated nature. |
+| **Music** | Basic score generated in real time via the Web Audio API. No pre-recorded audio files. |
+| **Script** | Branching dialogue with fourth-wall-breaking attempts at humour throughout. Characters acknowledge and mock their AI-generated nature. |
 | **Engine** | Single-file HTML/CSS/JavaScript application (~1,800 lines), canvas-rendered with DOM overlays for UI, voice audio engine with preloading and playback synchronisation, deployed as a static website. |
 
 ### Observations
