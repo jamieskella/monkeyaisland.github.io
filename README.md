@@ -2,7 +2,7 @@
 
 **A Generative AI Capability Benchmark by [Jamie Skella](https://www.linkedin.com/in/jamieskella/) - Framed Through the Technical Legacy of *The Secret of Monkey Island* (1990)**
 
-**v1 March 2026:** (First generation, Perplexity Computer) [http://monkeyaisland.com/v1-2026/](http://monkeyaisland.com/v1-2026/) | Need the "hint book"? Read this [puzzle guide](https://monkeyaisland.com/v1-2026/walkthrough.md)
+**v1 March 2026:** (First generation, Perplexity Computer) [http://monkeyaisland.com/v1-2026/](http://monkeyaisland.com/v1-2026/) | Need the "hint book"? Watch the [gameplay video](https://www.youtube.com/watch?v=Sbsg-N7dzOI)
 
 ---
 
@@ -70,7 +70,7 @@ The system generated a complete, browser-based point-and-click adventure game wi
 
 ### Observations
 
-The result is a playable game - not a tech demo, not a proof of concept, but a game with a beginning, middle, and end. A player can walk between scenes, talk to characters, collect items, solve puzzles in sequence, and reach a victory state. The verb bar works. The inventory works. The music plays. Every character speaks with a distinct voice. Characters say things that are, occasionally, genuinely funny. Props to GenAI for weaving in rubber chickens and melting jugs of grog - tidy little hat-tips to the original game.
+The result is a playable game - not a tech demo, not a proof of concept, but a game with a beginning, middle, and end. A player can walk between scenes, talk to characters, collect items, solve puzzles in sequence, and reach a victory state. The verb bar works. The inventory works. The music plays. Every character speaks with a distinct voice. Characters say things that are, very occasionally, genuinely funny. Props to GenAI for weaving in rubber chickens and melting jugs of grog - tidy little hat-tips to the original game.
 
 It is also, by any honest accounting, not in the same category as the 1990 original. The pixel art backgrounds, while atmospheric and stylistically coherent, lack the hand-crafted intentionality of the original's art direction. The character sprites don't feel coherent with the game world and the animations are rudimentary. The puzzle design, while functional, is not compelling. The music is barely that, it couldn't be further away from a Michael Land composition. The voice acting gives each character audible personality but doesn't approach the nuanced performance direction of professional actors like Dominic Armato, whose portrayal of Guybrush Threepwood in *The Curse of Monkey Island* set a standard these AI voices don't nearly reach. The script is witty in places but doesn't sustain the comedic rhythm that made the original's writing exceptional across hours of play.
 
@@ -119,20 +119,3 @@ Whether a generative AI can achieve that kind of holistic creative integration -
 In 1990, it took a team of dedicated professionals nine months and a custom engine refined across four prior titles to produce a game that would go on to be named among the greatest ever made. In 2026, a generative AI produced a fully voice-acted, playable, self-aware spiritual successor in a single session. The gap between the two is vast. How far it narrows is what we'll find out.
 
 This document will grow with each new AI generation, with a new section recording its capabilities, its limitations, and the distance that remains. Monkey AIsland is, in that sense, both a game and a measuring stick: built in tribute to one of the most important games ever made, and rebuilt periodically by GenAI to track the progress of the machines that are learning to make them.
-
----
-
-## Sources
-
-1. ["The Secret of Monkey Island," Wikipedia](https://en.wikipedia.org/wiki/The_Secret_of_Monkey_Island)
-2. ["The SCUMM Diary: Stories behind one of the greatest game engines ever made," Game Developer](https://www.gamedeveloper.com/design/the-scumm-diary-stories-behind-one-of-the-greatest-game-engines-ever-made)
-3. ["The Secrets of Monkey Island's Source Code," Video Game History Foundation](https://gamehistory.org/monkeyisland/)
-4. ["Monkey Island, or How Ron Gilbert Made an Adventure Game That Didn't Suck," The Digital Antiquarian](https://www.filfre.net/2017/03/monkey-island-or-how-ron-gilbert-made-an-adventure-game-that-didnt-suck/)
-5. ["LucasArts' Secret History: The Secret of Monkey Island," The International House of Mojo](https://mixnmojo.com/features/sitefeatures/LucasArts-Secret-History-5-The-Secret-of-Monkey-Island)
-6. ["iMUSE," Wikipedia](https://en.wikipedia.org/wiki/IMUSE)
-7. ["SCUMM," Wikipedia](https://en.wikipedia.org/wiki/SCUMM)
-8. ["Why Adventure Games Suck," Ron Gilbert, Grumpy Gamer (originally published 1989)](https://grumpygamer.com/why_adventure_games_suck/)
-9. ["GDC 2026 Report: 52% of Game Devs Say Generative AI Is Negatively Impacting the Industry," GIANTY](https://www.gianty.com/gdc-2026-report-about-generative-ai/)
-10. ["Video Gaming Report 2026: The Next Era of Growth," BCG](https://www.bcg.com/publications/2025/video-gaming-report-2026-next-era-of-growth)
-11. ["10 Predictions for AI in Games for 2026," AI and Games](https://www.aiandgames.com/p/10-predictions-for-ai-in-games-for)
-12. ["Developer use of generative AI may be declining," Game Developer](https://www.gamedeveloper.com/production/developer-use-of-generative-ai-may-be-declining)
