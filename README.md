@@ -2,7 +2,7 @@
 
 **A Generative AI Capability Benchmark by [Jamie Skella](https://www.linkedin.com/in/jamieskella/) - Framed Through the Technical Legacy of *The Secret of Monkey Island* (1990)**
 
-**v1 March 2026:** (First generation, Perplexity Computer) [http://monkeyaisland.com/v1-2026/](http://monkeyaisland.com/v1-2026/) | Need the hint book? Read the [walkthrough guide](https://monkeyaisland.com/v1-2026/walkthrough.md)
+**v1 March 2026:** (First generation, Perplexity Computer) [http://monkeyaisland.com/v1-2026/](http://monkeyaisland.com/v1-2026/) | Need the "hint book"? Read this [puzzle guide](https://monkeyaisland.com/v1-2026/walkthrough.md)
 
 ---
 
@@ -14,11 +14,22 @@ My daughter of seven years old, Eve, has recently become vocal about a desire to
 
 The premise is straightforward. Beginning in March 2026, a generative AI system is given a prompt detailing an idea (with a reasonable assumption it could do even better using a prompt which resembled clear specification): produce a complete, playable point-and-click adventure game as a spiritual - and explicitly unofficial - successor to *The Secret of Monkey Island*. The game must include original characters, backgrounds, animations, music, script, audibly voice-acted dialogue, and a functioning puzzle chain. It must be narratively self-aware, breaking the fourth wall to acknowledge and satirise its own AI-generated nature. It is called "Monkey AIsland".
 
-![Animated comparison of the Monkey Island lookout scene in raw EGA (16 colours, Mark Ferrari dithering) crossfading to a simulated CRT rendition with phosphor bloom, scanlines, and colour bleed that gave the illusion of a far richer palette](readme-assets/ega-to-crt.gif)
+<p align="center">
+  <img src="readme-assets/ega-to-crt.gif"
+       alt="Animated comparison of the Monkey Island lookout scene in raw EGA (16 colours, Mark Ferrari dithering) crossfading to a simulated CRT rendition with phosphor bloom, scanlines, and colour bleed that gave the illusion of a far richer palette"
+       style="max-width:640px; width:100%;">
+</p>
 
 Monkey Island is a deliberate choice of reference point. A point-and-click adventure is one of the most compositionally demanding formats in games. It requires competence across every creative discipline simultaneously: visual art (backgrounds, character sprites, animation), narrative design (branching dialogue, world-building, humour), game design (puzzle logic, inventory systems, state management), audio (music composition, adaptive scoring, voice acting), and software engineering (rendering, input handling, scene management). Every element must be authored and integrated - which makes it a genuinely compelling stress test for a generative system's breadth.
 
-![The LucasArts team packing boxes of The Secret of Monkey Island for shipment, c. 1990. Among them: Ron Gilbert, Tim Schafer, Dave Grossman, Steve Purcell, Mark Ferrari, and the rest of the crew who built a genre-defining classic. (Photo: MixnMojo)](readme-assets/lucasarts-team-1990.jpeg)
+<figure style="text-align:center;">
+  <img src="readme-assets/lucasarts-team-1990.jpeg"
+       alt="The LucasArts team packing boxes of The Secret of Monkey Island for shipment, c. 1990. Among them: Ron Gilbert, Tim Schafer, Dave Grossman, Steve Purcell, Mark Ferrari, and the rest of the crew who built a genre-defining classic. (Photo: MixnMojo)"
+       style="max-width:640px; width:100%; display:block; margin:0 auto;">
+  <figcaption style="max-width:640px; margin:0.5em auto 0;">
+    The LucasArts team packing boxes of <em>The Secret of Monkey Island</em> for shipment, c. 1990. Among them: Ron Gilbert, Tim Schafer, Dave Grossman, Steve Purcell, Mark Ferrari, and the rest of the crew who built a genre‑defining classic. (Photo: MixnMojo)
+  </figcaption>
+</figure>
 
 The original Monkey Island took a team roughly nine months to produce, including design, art, programming, music, and testing. It was the output of a deep pipeline of human expertise. Asking a generative AI to produce an equivalent in a single session is, by any reasonable measure, an unfair comparison - and that's precisely the point. Unfair comparisons are sometimes the most important kind. This experiment doesn't ask whether AI can match a team of humans working for almost a year. It asks how close it can get in a fraction of the time, and whether that distance shrinks year over year, generation to generation.
 
