@@ -2,8 +2,6 @@
 
 **A Generative AI Capability Benchmark by [Jamie Skella](https://www.linkedin.com/in/jamieskella/) - Framed Through the Technical Legacy of *The Secret of Monkey Island* (1990)**
 
-**v1 March 2026:** (First generation, Perplexity Computer) [http://monkeyaisland.com/v1-2026/](http://monkeyaisland.com/v1-2026/) | Need the "hint book"? Watch the [gameplay video](https://www.youtube.com/watch?v=Sbsg-N7dzOI)
-
 ---
 
 ## The Experiment
@@ -48,6 +46,8 @@ That constellation extended to the visual - a particular point of interest for m
 To speak of a pre-Monkey Island and post-Monkey Island era of video games, as the digital historian Jimmy Maher has observed, would not be at all out of order. Designers at other studios - from Sierra's Corey Cole to Legend Entertainment's Bob Bates - cite it unprompted as a work that fundamentally changed their approach to design. The SCUMM engine went on to power twelve LucasArts titles over a decade, and its philosophy of separating scripting from rendering anticipated the architecture of modern game engines by years.
 
 ---
+
+**v1 March 2026:** (First generation, Perplexity Computer) [http://monkeyaisland.com/v1-2026/](http://monkeyaisland.com/v1-2026/) | Need the "hint book"? Watch the [gameplay video](https://www.youtube.com/watch?v=Sbsg-N7dzOI)
 
 ## First Generation: March 2026
 
