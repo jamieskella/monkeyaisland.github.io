@@ -3,12 +3,12 @@
 **A Generative AI Capability Benchmark by [Jamie Skella](https://www.linkedin.com/in/jamieskella/) - Framed Through the Technical Legacy of *The Secret of Monkey Island* (1990)**
 
 <div style="display: flex; gap: 8px;">
-  <div>**v1 March 2026:**</div>
-  <div>Orchestrator: Claude Sonnet 4.0</div>
+  <div><b>v1 March 2026:</b></div>
+  <div>Orchestrator: Perplexity Computer (using Claude Sonnet 4.0)</div>
   <div>Code, writing, game design, music, research: Claude Sonnet 4.0</div>
   <div>Scene background art: Nano Banana 2</div>
   <div>Voice acting: ElevenLabs TTS v3 </div>
-  <div>[Gameplay video](https://www.youtube.com/watch?v=Sbsg-N7dzOI)</div>
+  <div>Gameplay video: https://www.youtube.com/watch?v=Sbsg-N7dzOI</div>
 </div>
 
 ---
