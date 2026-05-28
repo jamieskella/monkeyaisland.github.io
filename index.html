@@ -1,0 +1,717 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Monkey AIsland, A Generative AI Capability Benchmark</title>
+<meta name="description" content="A repeatable benchmark measuring the capability of generative AI systems in the domain of game creation, anchored to a fixed creative brief: recreate The Secret of Monkey Island." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,700;9..144,900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --paper:#F2EFE7;
+    --paper-2:#EAE5D8;
+    --ink:#0B0B0E;
+    --ink-2:#1A1A1F;
+    --rule:#171717;
+    --muted:#5C5A52;
+    --accent:#5B3FCC;        /* Monkey Island purple */
+    --accent-soft:#7C63E0;
+    --accent-2:#0B5C3B;
+    --highlight:#F4D35E;
+    --link:#3D2A8A;
+    --maxw:1240px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  body{
+    background-image:
+      radial-gradient(rgba(0,0,0,.045) 1px, transparent 1px),
+      radial-gradient(rgba(0,0,0,.025) 1px, transparent 1px);
+    background-size: 3px 3px, 7px 7px;
+    background-position: 0 0, 1px 1px;
+  }
+  a{color:var(--link);text-decoration:none;border-bottom:1px solid rgba(61,42,138,.3)}
+  a:hover{border-bottom-color:var(--link)}
+  ::selection{background:var(--highlight);color:var(--ink)}
+
+  /* ---------- Top tape strip ---------- */
+  .tape{
+    background:var(--ink);color:var(--paper);
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    padding:8px 24px;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;
+  }
+  .tape .blink{display:inline-block;width:8px;height:8px;background:var(--accent);border-radius:50%;margin-right:8px;animation:blink 2.4s infinite}
+  @keyframes blink{0%,60%{opacity:1}80%,100%{opacity:.25}}
+
+  /* ---------- Nav ---------- */
+  nav.top{
+    max-width:var(--maxw);margin:0 auto;padding:28px 32px 0;
+    display:flex;justify-content:space-between;align-items:flex-end;
+    border-bottom:1px solid var(--ink);
+  }
+  .brand{font-family:'Fraunces',serif;font-weight:900;font-size:22px;letter-spacing:-.02em;line-height:1}
+  .brand small{display:block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+  nav.top ul{display:flex;gap:28px;list-style:none;padding:0;margin:0 0 8px;font-size:13px;font-weight:500}
+  nav.top a{color:var(--ink);border:none}
+  nav.top a:hover{color:var(--accent)}
+
+  /* ---------- Masthead ---------- */
+  header.masthead{
+    max-width:var(--maxw);margin:0 auto;padding:48px 32px 56px;
+    display:grid;grid-template-columns: 1fr 320px;gap:64px;
+    border-bottom:2px solid var(--ink);
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);
+    margin-bottom:24px;display:flex;align-items:center;gap:14px;
+  }
+  .eyebrow::before{content:"";display:inline-block;width:36px;height:1px;background:var(--accent)}
+  h1.title{
+    font-family:'Fraunces',serif;font-weight:900;font-style:normal;
+    font-size:clamp(46px, 7.4vw, 104px);line-height:.95;letter-spacing:-.035em;
+    margin:0 0 18px;
+  }
+  h1.title .mi{color:var(--accent);font-weight:900}
+  .subtitle{
+    font-family:'Fraunces',serif;font-weight:400;
+    font-size:clamp(20px,2vw,26px);line-height:1.35;color:var(--ink-2);max-width:46ch;
+    margin:0 0 36px;
+  }
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap}
+  .pill{
+    display:inline-flex;align-items:center;gap:12px;
+    padding:13px 22px;border-radius:999px;border:1px solid var(--ink);
+    font-size:13px;font-weight:600;letter-spacing:.02em;
+    background:transparent;color:var(--ink);transition:all .2s ease;
+  }
+  .pill .arrow{
+    width:22px;height:22px;border-radius:50%;border:1px solid currentColor;
+    display:inline-flex;align-items:center;justify-content:center;font-size:11px;
+  }
+  .pill:hover{background:var(--ink);color:var(--paper)}
+  .pill.primary{background:var(--ink);color:var(--paper)}
+  .pill.primary:hover{background:var(--accent);border-color:var(--accent)}
+
+  /* metadata sidebar */
+  .meta-card{
+    border:1px solid var(--ink);background:rgba(255,255,255,.4);
+    padding:24px;font-family:'JetBrains Mono',monospace;font-size:12px;
+    align-self:start;position:relative;
+  }
+  .meta-card::before{
+    content:"PAPER";position:absolute;top:-10px;left:18px;background:var(--paper);
+    padding:0 8px;letter-spacing:.3em;color:var(--accent);font-size:10px;
+  }
+  .meta-card dt{color:var(--muted);text-transform:uppercase;letter-spacing:.15em;font-size:10px;margin-top:14px}
+  .meta-card dt:first-child{margin-top:0}
+  .meta-card dd{margin:4px 0 0;color:var(--ink);font-weight:500;line-height:1.4;word-break:break-word}
+  .stamp{
+    margin-top:22px;padding-top:18px;border-top:1px dashed var(--muted);
+    color:var(--accent);font-weight:500;letter-spacing:.18em;text-transform:uppercase;font-size:11px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .stamp .dot{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+
+  /* ---------- Section base ---------- */
+  section{max-width:var(--maxw);margin:0 auto;padding:88px 32px}
+  .section-num{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.25em;color:var(--muted);
+    text-transform:uppercase;margin-bottom:18px;
+  }
+  h2{
+    font-family:'Fraunces',serif;font-weight:700;font-size:clamp(34px,4.2vw,58px);line-height:1.02;
+    letter-spacing:-.025em;margin:0 0 28px;max-width:22ch;
+  }
+  h2 .accent{color:var(--accent)}
+  h3{font-family:'Fraunces',serif;font-weight:700;font-size:24px;line-height:1.2;margin:32px 0 12px}
+  p{font-size:17px;line-height:1.65;color:var(--ink-2);max-width:68ch;margin:0 0 18px}
+  .lede p{font-size:20px;line-height:1.55}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:64px}
+  .twocol p{max-width:none}
+
+  /* ---------- Pull quote ---------- */
+  .pullquote{
+    border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);
+    padding:36px 0;margin:48px 0;
+    font-family:'Fraunces',serif;font-weight:500;font-size:clamp(24px,2.6vw,34px);
+    line-height:1.3;color:var(--ink);max-width:64ch;
+  }
+  .pullquote::before{content:"“";color:var(--accent);font-size:1.6em;line-height:0;vertical-align:-.2em;margin-right:6px}
+
+  /* ---------- Components grid (cards with oval) ---------- */
+  .components{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:32px;
+  }
+  .ccard{
+    position:relative;border:1px solid var(--ink);padding:32px 26px 26px;background:rgba(255,255,255,.35);
+    min-height:240px;display:flex;flex-direction:column;justify-content:space-between;
+    overflow:hidden;
+  }
+  .ccard::before{
+    content:"";position:absolute;top:-60%;left:50%;transform:translateX(-50%);
+    width:140%;aspect-ratio:1/1;border:1px solid var(--ink);border-radius:50%;
+    pointer-events:none;opacity:.35;
+  }
+  .ccard h4{font-family:'Fraunces',serif;font-weight:700;font-size:22px;margin:0 0 8px;letter-spacing:-.01em}
+  .ccard .lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--accent);text-transform:uppercase;margin-bottom:18px}
+  .ccard p{font-size:14px;line-height:1.55;margin:0;color:var(--ink-2)}
+
+  /* ---------- Scorecard (with delta column) ---------- */
+  .scorecard{
+    border:2px solid var(--ink);margin-top:24px;background:rgba(255,255,255,.5);
+  }
+  .scorecard table{width:100%;border-collapse:collapse;font-family:'Inter',sans-serif}
+  .scorecard th,.scorecard td{
+    text-align:left;padding:18px 22px;border-bottom:1px solid var(--ink);font-size:15px;vertical-align:top;
+  }
+  .scorecard th{
+    background:var(--ink);color:var(--paper);font-family:'JetBrains Mono',monospace;font-size:11px;
+    letter-spacing:.2em;text-transform:uppercase;font-weight:500;
+  }
+  .scorecard tr:last-child td{border-bottom:none}
+  .scorecard .dim{font-family:'Fraunces',serif;font-weight:700;font-size:18px;width:24%}
+  .scorecard .what{color:var(--muted);font-size:14px;width:42%}
+  .scorecard .gen-col{width:14%;text-align:center}
+  .scorecard .delta-col{width:6%;text-align:center;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:14px}
+  .score-pill{
+    display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+    border:1px solid var(--ink);
+  }
+  .score-pill.basic{background:var(--paper-2)}
+  .score-pill.competent{background:var(--accent-2);color:var(--paper);border-color:var(--accent-2)}
+  .score-pill.advanced{background:var(--accent);color:var(--paper);border-color:var(--accent)}
+  .score-pill.pending{background:transparent;color:var(--muted);border-color:rgba(0,0,0,.18);border-style:dashed}
+
+  /* ---------- Generations: tabs + panels ---------- */
+  .gens-shell{
+    margin-top:36px;border:2px solid var(--ink);background:rgba(255,255,255,.4);
+  }
+  .gens-tabs{
+    display:flex;flex-wrap:wrap;border-bottom:2px solid var(--ink);background:var(--paper-2);
+  }
+  .gens-tabs button{
+    flex:1 1 0;min-width:160px;
+    border:none;border-right:1px solid var(--ink);background:transparent;
+    padding:18px 22px;cursor:pointer;text-align:left;
+    font-family:'Inter',sans-serif;color:var(--ink);
+    display:flex;flex-direction:column;gap:4px;
+    transition:background .15s ease;
+  }
+  .gens-tabs button:last-child{border-right:none}
+  .gens-tabs button:hover{background:rgba(91,63,204,.08)}
+  .gens-tabs button[aria-selected="true"]{background:var(--paper);box-shadow:inset 0 -3px 0 0 var(--accent)}
+  .gens-tabs .tab-label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent)}
+  .gens-tabs button[aria-selected="false"] .tab-label{color:var(--muted)}
+  .gens-tabs .tab-date{font-family:'Fraunces',serif;font-weight:700;font-size:18px;letter-spacing:-.01em}
+  .gens-tabs .tab-sub{font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace;letter-spacing:.05em}
+
+  .gens-panel{display:none;padding:40px 32px}
+  .gens-panel[aria-hidden="false"]{display:block}
+  .gens-panel .panel-head{
+    display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end;
+    padding-bottom:20px;border-bottom:1px solid rgba(0,0,0,.15);margin-bottom:28px;
+  }
+  .gens-panel .panel-head h3{margin:0 0 4px;font-size:30px}
+  .gens-panel .panel-head .sub{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+  .gens-panel .panel-head .stack{display:flex;flex-direction:column;gap:6px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .gens-panel .panel-head .stack b{color:var(--ink);font-weight:500}
+
+  /* ---------- Components table ---------- */
+  .components-table{width:100%;border-collapse:collapse;margin-top:8px;font-size:15px}
+  .components-table th,.components-table td{
+    text-align:left;padding:14px 16px;border-bottom:1px solid rgba(0,0,0,.15);vertical-align:top;
+  }
+  .components-table th{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--muted);border-bottom:1px solid var(--ink);
+  }
+  .components-table td:first-child{font-family:'Fraunces',serif;font-weight:700;width:160px;color:var(--ink)}
+
+  /* placeholder panel for future gens */
+  .gens-placeholder{
+    text-align:center;padding:48px 24px;
+  }
+  .gens-placeholder .badge{
+    display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent);border:1px dashed var(--accent);padding:6px 14px;border-radius:999px;
+  }
+  .gens-placeholder h4{font-family:'Fraunces',serif;font-weight:700;font-size:28px;margin:18px 0 10px}
+  .gens-placeholder p{margin:0 auto;color:var(--muted);max-width:48ch}
+
+  /* trend strip above the tabs */
+  .trend-strip{
+    display:grid;grid-template-columns:repeat(7,1fr);gap:0;
+    border:1px solid var(--ink);background:rgba(255,255,255,.4);
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--muted);
+  }
+  .trend-strip .cell{padding:12px 14px;border-right:1px solid rgba(0,0,0,.15);min-width:0}
+  .trend-strip .cell:last-child{border-right:none}
+  .trend-strip .cell .lbl{display:block;margin-bottom:6px;font-size:9px}
+  .trend-strip .cell .v{font-family:'Fraunces',serif;font-weight:700;font-size:17px;letter-spacing:-.01em;color:var(--ink);text-transform:none}
+
+  /* ---------- Two-up images / inline figure ---------- */
+  figure{margin:36px 0;padding:0}
+  figure img{width:100%;display:block;border:1px solid var(--ink)}
+  figcaption{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--muted);margin-top:10px;
+  }
+  figcaption strong{color:var(--accent);font-weight:500;margin-right:8px}
+
+  /* ---------- Methodology list ---------- */
+  ol.method{counter-reset:m;list-style:none;padding:0;margin:24px 0 0;max-width:70ch}
+  ol.method li{
+    counter-increment:m;padding:18px 0 18px 56px;position:relative;
+    border-top:1px solid rgba(0,0,0,.18);font-size:16px;line-height:1.55;color:var(--ink-2);
+  }
+  ol.method li:last-child{border-bottom:1px solid rgba(0,0,0,.18)}
+  ol.method li::before{
+    content:counter(m,decimal-leading-zero);
+    position:absolute;left:0;top:18px;
+    font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.15em;
+  }
+
+  /* ---------- Footer ---------- */
+  footer{
+    margin-top:80px;background:var(--ink);color:var(--paper);
+  }
+  .footer-inner{
+    max-width:var(--maxw);margin:0 auto;padding:64px 32px 40px;
+    display:grid;grid-template-columns: 2fr 1fr 1fr;gap:48px;
+  }
+  footer h5{font-family:'Fraunces',serif;font-size:32px;margin:0 0 16px;font-weight:700;letter-spacing:-.02em}
+  footer p{color:rgba(242,239,231,.7);font-size:14px;line-height:1.6;max-width:48ch;margin:0}
+  footer .col h6{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.25em;text-transform:uppercase;
+    color:var(--accent-soft);margin:0 0 16px;font-weight:500;
+  }
+  footer ul{list-style:none;padding:0;margin:0}
+  footer li{margin-bottom:10px;font-size:13px}
+  footer a{color:var(--paper);border:none;opacity:.85}
+  footer a:hover{opacity:1;color:var(--accent-soft)}
+  .colophon{
+    border-top:1px solid rgba(242,239,231,.15);padding:20px 32px;
+    max-width:var(--maxw);margin:0 auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(242,239,231,.55);
+  }
+  .colophon a{color:rgba(242,239,231,.85);border:none}
+  .colophon a:hover{color:var(--accent-soft)}
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 900px){
+    header.masthead{grid-template-columns:1fr;gap:32px;padding:32px 24px 40px}
+    nav.top ul{display:none}
+    section{padding:64px 24px}
+    .twocol{grid-template-columns:1fr;gap:8px}
+    .components{grid-template-columns:1fr}
+    .footer-inner{grid-template-columns:1fr;gap:32px;padding:48px 24px 28px}
+    .scorecard th:nth-child(2),.scorecard td:nth-child(2){display:none}
+    .gens-panel .panel-head{grid-template-columns:1fr;text-align:left}
+    .gens-panel .panel-head .stack{text-align:left}
+    .trend-strip{grid-template-columns:repeat(2,1fr)}
+    .trend-strip .cell{border-right:1px solid rgba(0,0,0,.15);border-bottom:1px solid rgba(0,0,0,.15)}
+  }
+</style>
+</head>
+<body>
+
+<div class="tape">
+  <span><span class="blink"></span>BENCHMARK · ACTIVE · LONGITUDINAL</span>
+  <span>v1 · March 2026 · Perplexity Computer / Claude Sonnet 4.0</span>
+  <span>Adelaide, AU · Jamie Skella</span>
+</div>
+
+<nav class="top">
+  <div class="brand">Monkey AIsland<small>A capability benchmark</small></div>
+  <ul>
+    <li><a href="#experiment">The Experiment</a></li>
+    <li><a href="#why">Why Monkey Island</a></li>
+    <li><a href="#generations">Generations</a></li>
+    <li><a href="#methodology">Methodology</a></li>
+    <li><a href="#forward">Looking Forward</a></li>
+  </ul>
+</nav>
+
+<header class="masthead">
+  <div>
+    <div class="eyebrow">Generative AI · Capability Benchmark · Paper v1</div>
+    <h1 class="title">The Hallucination of <span class="mi">Monkey Island</span>.</h1>
+    <p class="subtitle">A Generative AI Capability Benchmark by Jamie Skella, framed through the technical legacy of The Secret of Monkey Island (1990).</p>
+    <div class="cta-row">
+      <a class="pill primary" href="./v1-2026/index.html">Play v1, March 2026</a>
+      <a class="pill" href="#generations">Read the paper</a>
+      <a class="pill" href="https://www.youtube.com/watch?v=Sbsg-N7dzOI">Gameplay video</a>
+    </div>
+  </div>
+  <aside class="meta-card">
+    <dl>
+      <dt>Author</dt><dd><a href="https://www.linkedin.com/in/jamieskella/">Jamie Skella</a></dd>
+      <dt>Affiliation</dt><dd>Independent / Skella &amp; Co.</dd>
+      <dt>First published</dt><dd>March 2026</dd>
+      <dt>Document type</dt><dd>Longitudinal benchmark</dd>
+      <dt>Cadence</dt><dd>Re-run on frontier model releases</dd>
+      <dt>Repository</dt><dd><a href="https://github.com/jamieskella/monkeyaisland.github.io">github.com/jamieskella/monkeyaisland.github.io</a></dd>
+    </dl>
+    <div class="stamp"><span class="dot"></span>Open · CC BY 4.0</div>
+  </aside>
+</header>
+
+<!-- ============== The Experiment ============== -->
+<section id="experiment">
+  <div class="section-num">§ 01 · The Experiment</div>
+  <h2>Can AI beat a human at chess? Pfft. Jeopardy? Whatever. Pass the Turing Test? So passé. <span class="accent">Can AI recreate The Secret of Monkey Island?</span> Now we're talking.</h2>
+
+  <div class="twocol lede">
+    <div>
+      <p>My daughter of seven years old has very recently become vocal about a desire to start making her own video games. She is now set up with a Steam Deck on an external monitor, using Linux desktop to bring her ideas to life, starting with no-code tools including Scratch, GDevelop, and Piskel. Coincidentally, I recently wrapped up some consulting work with a startup building GenAI tech in the video game space.</p>
+      <p>This intersection of happenstance got me thinking, subconsciously at first and overtly later, about what my daughter's life might look like if she chose to pursue this career path, amidst the rise of generative AI. Will an artist have the most longevity or the highest demand? What about musician? Writer? Engineer? Or is it a case that each creative mind becomes nine-tenths of an indie studio, who can do much of all required to realise their ideas, thanks to new tooling? If that, then when might the tools be good enough to ingest ideas, specifications, assets, and generate games of the quality players expect?</p>
+    </div>
+    <div>
+      <p><strong>Enter Monkey AIsland.</strong> This is not a commentary on the ethical question of whether AI should or shouldn't be used to develop a game. This is a measurement of whether AI can. That distinction is critical. This is a repeatable experiment designed to measure the capability of generative AI systems in the domain of game creation, run whenever frontier models receive meaningful updates and anchored to a fixed creative brief. Each output is allowed a maximum of three follow-up prompts to correct any glaring issues the initial generation missed.</p>
+      <p>The premise is straightforward. Beginning in March 2026, a generative AI system is given a prompt detailing an idea (with a reasonable assumption it could do even better using a prompt which resembled clear specification): produce a complete, playable point-and-click adventure game as a spiritual, and explicitly unofficial, successor to The Secret of Monkey Island.</p>
+    </div>
+  </div>
+
+  <figure>
+    <img src="https://raw.githubusercontent.com/jamieskella/monkeyaisland.github.io/main/readme-assets/ega-to-crt.gif" alt="Animated comparison of the Monkey Island lookout scene in raw EGA (16 colours, Mark Ferrari dithering) crossfading to a simulated CRT rendition with phosphor bloom, scanlines, and colour bleed that gave the illusion of a far richer palette" onerror="this.style.display='none';this.nextElementSibling.style.borderTop='none'" />
+    <figcaption><strong>Fig. 01</strong>EGA palette dithered, then phosphor-bloomed through a CRT. Hundreds of perceived tones from sixteen source colours.</figcaption>
+  </figure>
+
+  <p>The game must include original characters, backgrounds, animations, music, script, audibly voice-acted dialogue, and a functioning puzzle chain. It must be narratively self-aware, breaking the fourth wall to acknowledge and satirise its own AI-generated nature. It is called "Monkey AIsland".</p>
+
+  <div class="pullquote">A point-and-click adventure is one of the most compositionally demanding formats in games. It requires competence across every creative discipline simultaneously.</div>
+
+  <p>Monkey Island is a deliberate choice of reference point. It requires competence across visual art (backgrounds, character sprites, animation), narrative design (branching dialogue, world-building, humour), game design (puzzle logic, inventory systems, state management), audio (music composition, adaptive scoring, voice acting), and software engineering (rendering, input handling, scene management). Every element must be authored and integrated, which makes it a genuinely compelling stress test for a generative system's breadth.</p>
+
+  <p>The original Monkey Island took a team roughly nine months to produce, including design, art, programming, music, and testing. It was the output of a deep pipeline of human expertise. Asking a generative AI to produce an equivalent in a single session is, by any reasonable measure, an unfair comparison. That's precisely the point. Unfair comparisons are sometimes the most important kind. This experiment doesn't ask whether AI can match a team of humans working for almost a year. It asks how close it can get in a fraction of the time, and whether that distance shrinks year over year, generation to generation.</p>
+</section>
+
+<!-- ============== Why Monkey Island ============== -->
+<section id="why" style="background:var(--paper-2);max-width:none;padding:88px 0">
+  <div style="max-width:var(--maxw);margin:0 auto;padding:0 32px">
+    <div class="section-num">§ 02 · Reference Point</div>
+    <h2>Why Monkey Island matters.</h2>
+
+    <p style="font-size:19px;max-width:72ch">In October 1990, Lucasfilm Games (an experimental studio funded by George Lucas, working out of Skywalker Ranch) released The Secret of Monkey Island. It redefined the genre, and redefined what interactive storytelling could be.</p>
+
+    <figure>
+      <img src="https://raw.githubusercontent.com/jamieskella/monkeyaisland.github.io/main/readme-assets/lucasarts-team-1990.jpeg" alt="The LucasArts team packing boxes of The Secret of Monkey Island for shipment, c. 1990. Among them: Ron Gilbert, Tim Schafer, Dave Grossman, Steve Purcell, Mark Ferrari, and the rest of the crew who built a genre-defining classic." onerror="this.style.display='none';this.nextElementSibling.style.borderTop='none'" />
+      <figcaption><strong>Fig. 02</strong>Lucasfilm Games · Skywalker Ranch · 1990. The deep human pipeline against which generative systems are measured.</figcaption>
+    </figure>
+
+    <div class="twocol">
+      <div>
+        <h3>The SCUMM advantage</h3>
+        <p>What made Monkey Island technically significant wasn't any single innovation but a constellation of them, each reinforcing the others. The game was the fifth title built on the SCUMM engine (Script Creation Utility for Maniac Mansion), a system originally developed by Ron Gilbert for the 1987 title Maniac Mansion.</p>
+        <p>By the time it reached Monkey Island, SCUMM had matured into something genuinely ahead of its time: a cross-platform scripting environment with multitasking capabilities, allowing background actors to animate, clocks to tick, and ambient events to unfold while the player thought about their next move. It was, in effect, a game engine that separated logic from presentation. Designers could prototype rooms and puzzles on Sun workstations using tools built in C and YACC, then compile for target hardware. Most studios of the era wrote code and ran code on the same limited machine. LucasArts operated more like a software engineering firm, and there was an institutional rigour to the companion tooling that was rare in the industry. FLEM (for placing objects in rooms), BYLE (for compiling), SPIT (for font design), and SPUTM (the SCUMM Presentation Utility).</p>
+      </div>
+      <div>
+        <h3>Ferrari's dithered palette</h3>
+        <p>That constellation extended to the visual, a particular point of interest for me as a visual designer and RetroTINK user. The backgrounds of The Secret of Monkey Island owed their atmospheric depth to artist Mark Ferrari, whose pioneering use of colour dithering transformed what was possible within the brutal constraints of EGA's 16-colour palette.</p>
+        <p>Ferrari had first introduced dithering to Lucasfilm Games through an act of quiet provocation: on the final day of production on Zak McKracken and the Alien Mindbenders (1988), he left a dithered twilight scene on his monitor and went to lunch. The image (rolling hills, live oaks, a moon rising in a blended sky) was so obviously superior to anything achievable with solid EGA colours that it sparked an immediate debate between Ron Gilbert and the head of the games division about whether dither could be compressed. Within two months, it could. By the time Ferrari led the background art on Monkey Island, dithering had become a house technique, allowing him to suggest hundreds of intermediate tones from just 16 source colours and lending the game's environments a painterly quality that its contemporaries, working in flat fills, couldn't match.</p>
+      </div>
+    </div>
+
+    <div class="pullquote">To speak of a pre-Monkey Island and post-Monkey Island era of video games, as the digital historian Jimmy Maher has observed, would not be at all out of order.</div>
+
+    <p>Designers at other studios, from Sierra's Corey Cole to Legend Entertainment's Bob Bates, cite it unprompted as a work that fundamentally changed their approach to design. The SCUMM engine went on to power twelve LucasArts titles over a decade, and its philosophy of separating scripting from rendering anticipated the architecture of modern game engines by years.</p>
+  </div>
+</section>
+
+<!-- ============== Generations (tabs) ============== -->
+<section id="generations">
+  <div class="section-num">§ 03 · Generations · Longitudinal Log</div>
+  <h2>The record of each run, preserved.</h2>
+  <p style="max-width:72ch">Each generation is captured in its original form. The value isn't in any individual score, it's in the delta between generations. As frontier models receive meaningful updates, a new tab is added here, the brief is re-run verbatim, and the scorecard gains another column.</p>
+
+  <!-- Trend strip: longitudinal summary across all generations -->
+  <div class="trend-strip" style="margin-top:32px" aria-label="Longitudinal summary">
+    <div class="cell"><span class="lbl">Generations to date</span><span class="v">1</span></div>
+    <div class="cell"><span class="lbl">First run</span><span class="v">Mar 2026</span></div>
+    <div class="cell"><span class="lbl">Most recent</span><span class="v">Mar 2026</span></div>
+    <div class="cell"><span class="lbl">Dimensions tracked</span><span class="v">7</span></div>
+    <div class="cell"><span class="lbl">Best score</span><span class="v">Competent</span></div>
+    <div class="cell"><span class="lbl">Voice lines</span><span class="v">78</span></div>
+    <div class="cell"><span class="lbl">Next run</span><span class="v">TBA</span></div>
+  </div>
+
+  <!-- Tabs + panels -->
+  <div class="gens-shell" id="gens">
+    <div class="gens-tabs" role="tablist" aria-label="Generations">
+      <button role="tab" id="tab-v1" aria-controls="panel-v1" aria-selected="true" data-tab="v1">
+        <span class="tab-label">Gen 01</span>
+        <span class="tab-date">v1 · March 2026</span>
+        <span class="tab-sub">Claude Sonnet 4.0</span>
+      </button>
+      <button role="tab" id="tab-v2" aria-controls="panel-v2" aria-selected="false" data-tab="v2">
+        <span class="tab-label">Gen 02</span>
+        <span class="tab-date">v2 · TBA</span>
+        <span class="tab-sub">Next frontier release</span>
+      </button>
+      <button role="tab" id="tab-v3" aria-controls="panel-v3" aria-selected="false" data-tab="v3">
+        <span class="tab-label">Gen 03</span>
+        <span class="tab-date">v3 · TBA</span>
+        <span class="tab-sub">Reserved</span>
+      </button>
+      <button role="tab" id="tab-v4" aria-controls="panel-v4" aria-selected="false" data-tab="v4">
+        <span class="tab-label">Gen 04+</span>
+        <span class="tab-date">Future runs</span>
+        <span class="tab-sub">As models advance</span>
+      </button>
+    </div>
+
+    <!-- Panel: v1 -->
+    <div class="gens-panel" id="panel-v1" role="tabpanel" aria-labelledby="tab-v1" aria-hidden="false">
+      <div class="panel-head">
+        <div>
+          <div class="sub">First Generation</div>
+          <h3>v1 · March 2026</h3>
+        </div>
+        <div class="stack">
+          <span>Orchestrator: <b>Perplexity Computer</b></span>
+          <span>Code, writing, design, music: <b>Claude Sonnet 4.0</b></span>
+          <span>Background art: <b>Nano Banana 2</b></span>
+          <span>Voice acting: <b>ElevenLabs TTS v3</b></span>
+        </div>
+      </div>
+
+      <h3 style="margin-top:0">System and Constraints</h3>
+      <p>The first generation of Monkey AIsland was produced using Perplexity Computer in March 2026. The system was given a single natural-language prompt describing the creative brief. No code was pre-written. No assets were provided. No reference material was supplied beyond the prompt itself. Every decision (engine architecture, art style, music approach, puzzle design, script, deployment) was the system's own.</p>
+
+      <h3>What Was Produced</h3>
+      <p>The system generated a complete, browser-based point-and-click adventure game with the following components:</p>
+      <table class="components-table">
+        <thead><tr><th>Component</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>Scenes</td><td>Six fully illustrated backgrounds: title screen, harbour dock, SCUMM Bar tavern, jungle path, moonlit beach, voodoo cave. Each rendered in pixel art style via AI image generation.</td></tr>
+          <tr><td>Characters</td><td>Five distinct NPCs with unique sprites, dialogue trees, and personality: Guybrush Promptwood (protagonist), Murray the Skull, ChatGPeeTee (bartender), Governor Elaine Markup, and MidJourney (Voodoo Lady).</td></tr>
+          <tr><td>Interface</td><td>Classic SCUMM-style verb bar with nine verbs (Walk to, Look at, Pick up, Use, Talk to, Give, Push, Pull, Open), inventory management, and context-sensitive interaction.</td></tr>
+          <tr><td>Puzzles</td><td>A complete multi-item puzzle chain requiring item collection, combination, and NPC interaction across all scenes, culminating in a voodoo ritual victory condition.</td></tr>
+          <tr><td>Voice Acting</td><td>78 individually generated voice lines across six distinct characters, each with a unique ElevenLabs voice. Guybrush Promptwood speaks his dialogue choices aloud before NPCs respond. A narrator provides voiced scene descriptions, item examinations, and action feedback. Voice playback is synchronised with text display timing.</td></tr>
+          <tr><td>Music</td><td>Basic score generated in real time via the Web Audio API. No pre-recorded audio files.</td></tr>
+          <tr><td>Script</td><td>Branching dialogue with fourth-wall-breaking attempts at humour throughout. Characters acknowledge and mock their AI-generated nature.</td></tr>
+          <tr><td>Engine</td><td>Single-file HTML/CSS/JavaScript application (~1,800 lines), canvas-rendered with DOM overlays for UI, voice audio engine with preloading and playback synchronisation, deployed as a static website.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Observations</h3>
+      <p>The result is a playable game, a game with a beginning, middle, and end. Is it good? By measure of any gamer or any honest accounting, not at all. Yet let's remember that it was only a couple short years ago that AI image generation was producing human hands with six fingers. We are moving fast. Despite the fact it's not objectively good, from a generative systems perspective it is still an impressive output. A player can walk between scenes, talk to characters, collect items, solve puzzles in sequence, and reach a victory state. The verb bar works. The inventory works. The music plays. Every character speaks with a distinct voice. Characters say things that are, very occasionally, genuinely funny. Props to GenAI for weaving in rubber chickens and melting jugs of grog, tidy little hat-tips to the original game.</p>
+
+      <p>The obvious truth is that it's simply not nearly in the same category as the 1990 original. The pixel art backgrounds are inconsistent and lack hand-crafted intentionality. The character sprites don't feel coherent with the game world and the animations are rudimentary. The puzzle design, while functional, is not compelling. The music is barely music, it couldn't be further away from a Michael Land composition. The voice acting gives each character audible personality but is jarring and awkward. It doesn't approach the nuanced performance direction of professional actors like Dominic Armato, whose portrayal of Guybrush Threepwood in The Curse of Monkey Island set a standard these AI voices don't even nearly reach. The script is witty in places but it's hollow, the arc is weak and it doesn't sustain the comedic rhythm that made the original's writing exceptional across hours of play.</p>
+
+      <p>None of this is surprising. What is worth noting is what the system did manage to produce without explicit instruction. It chose an appropriate engine architecture (canvas with DOM overlays). It selected a verb set that maps closely to the original. It designed a puzzle dependency chain that requires multi-step thinking. It generated a score rather than trying to source external music files. It cast six distinct synthetic voices across 78 dialogue lines and built an audio engine to synchronise voice playback with text display. It wrote dialogue that is self-referentially aware in a structurally consistent way, not merely random. It built the whole thing as a deployable web application.</p>
+
+      <div class="pullquote">Broad competence across every required discipline. No single discipline absent. The gaps were in depth, not breadth.</div>
+
+      <div style="margin-top:32px;display:flex;gap:14px;flex-wrap:wrap">
+        <a class="pill primary" href="./v1-2026/index.html">Play v1 in your browser</a>
+        <a class="pill" href="./v1-2026/walkthrough.md">Walkthrough</a>
+        <a class="pill" href="./v1-2026/progress.md">Progress notes</a>
+      </div>
+    </div>
+
+    <!-- Panel: v2 (placeholder) -->
+    <div class="gens-panel" id="panel-v2" role="tabpanel" aria-labelledby="tab-v2" aria-hidden="true">
+      <div class="gens-placeholder">
+        <span class="badge">Awaiting input</span>
+        <h4>v2 will arrive with the next frontier model release.</h4>
+        <p>Same brief, verbatim. Same constraints. A new column will be added to the scorecard below, with a delta indicator showing movement from the previous generation. When that day comes, you will find the full panel here.</p>
+      </div>
+    </div>
+
+    <!-- Panel: v3 (placeholder) -->
+    <div class="gens-panel" id="panel-v3" role="tabpanel" aria-labelledby="tab-v3" aria-hidden="true">
+      <div class="gens-placeholder">
+        <span class="badge">Reserved</span>
+        <h4>v3 will run when a meaningful step change lands again.</h4>
+        <p>The cadence is event-driven, not calendar-driven. The benchmark waits for the models, not the other way around.</p>
+      </div>
+    </div>
+
+    <!-- Panel: v4+ (placeholder) -->
+    <div class="gens-panel" id="panel-v4" role="tabpanel" aria-labelledby="tab-v4" aria-hidden="true">
+      <div class="gens-placeholder">
+        <span class="badge">Future runs</span>
+        <h4>Beyond v3, every new generation gets its own tab.</h4>
+        <p>The structure scales: the trend strip above tracks the long arc, the tabs index every run, and the scorecard column grows wider with each entry.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Longitudinal Scorecard with delta column -->
+  <h3 style="margin-top:64px">Longitudinal Scorecard</h3>
+  <p style="margin-top:0;color:var(--muted);max-width:72ch">One column per generation. The delta column shows movement from the previous run. With one generation on record, deltas are blank by definition.</p>
+  <div class="scorecard">
+    <table>
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th>What it measures</th>
+          <th class="gen-col">v1 · Mar 2026</th>
+          <th class="delta-col">Δ</th>
+          <th class="gen-col">v2 · TBA</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="dim">Visual Art</td><td class="what">Quality, consistency, and intentionality of backgrounds, characters, and animation</td><td class="gen-col"><span class="score-pill basic">Basic</span></td><td class="delta-col">·</td><td class="gen-col"><span class="score-pill pending">Pending</span></td></tr>
+        <tr><td class="dim">Narrative Design</td><td class="what">Dialogue quality, comedic timing, world-building, fourth-wall execution</td><td class="gen-col"><span class="score-pill basic">Basic</span></td><td class="delta-col">·</td><td class="gen-col"><span class="score-pill pending">Pending</span></td></tr>
+        <tr><td class="dim">Puzzle Design</td><td class="what">Logical elegance, multi-step complexity, player guidance, fairness</td><td class="gen-col"><span class="score-pill basic">Basic</span></td><td class="delta-col">·</td><td class="gen-col"><span class="score-pill pending">Pending</span></td></tr>
+        <tr><td class="dim">Audio</td><td class="what">Musical quality, adaptive behaviour, thematic appropriateness</td><td class="gen-col"><span class="score-pill basic">Basic</span></td><td class="delta-col">·</td><td class="gen-col"><span class="score-pill pending">Pending</span></td></tr>
+        <tr><td class="dim">Voice acting</td><td class="what">Comedic timing, emotional nuance, alignment with narrative tone</td><td class="gen-col"><span class="score-pill basic">Basic</span></td><td class="delta-col">·</td><td class="gen-col"><span class="score-pill pending">Pending</span></td></tr>
+        <tr><td class="dim">Engineering</td><td class="what">Code architecture, performance, deployment, cross-browser support</td><td class="gen-col"><span class="score-pill competent">Competent</span></td><td class="delta-col">·</td><td class="gen-col"><span class="score-pill pending">Pending</span></td></tr>
+        <tr><td class="dim">Creative Coherence</td><td class="what">Whether all elements feel like they belong to the same game world</td><td class="gen-col"><span class="score-pill basic">Basic</span></td><td class="delta-col">·</td><td class="gen-col"><span class="score-pill pending">Pending</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============== Components / Why this format ============== -->
+<section id="components" style="background:var(--ink);color:var(--paper);max-width:none;padding:88px 0">
+  <div style="max-width:var(--maxw);margin:0 auto;padding:0 32px">
+    <div class="section-num" style="color:rgba(242,239,231,.6)">§ 04 · Why this format</div>
+    <h2 style="color:var(--paper)">A point-and-click is a <span style="color:var(--highlight)">stress test</span> for every creative discipline at once.</h2>
+
+    <div class="components">
+      <div class="ccard" style="background:#15151A;border-color:rgba(255,255,255,.2);color:var(--paper)">
+        <div>
+          <div class="lbl">Discipline 01</div>
+          <h4 style="color:var(--paper)">Visual Art</h4>
+          <p style="color:rgba(242,239,231,.7)">Backgrounds, character sprites, animation. Consistency of style across many distinct scenes.</p>
+        </div>
+      </div>
+      <div class="ccard" style="background:#15151A;border-color:rgba(255,255,255,.2);color:var(--paper)">
+        <div>
+          <div class="lbl">Discipline 02</div>
+          <h4 style="color:var(--paper)">Narrative Design</h4>
+          <p style="color:rgba(242,239,231,.7)">Branching dialogue, world-building, humour. Comedic rhythm sustained across hours of play.</p>
+        </div>
+      </div>
+      <div class="ccard" style="background:#15151A;border-color:rgba(255,255,255,.2);color:var(--paper)">
+        <div>
+          <div class="lbl">Discipline 03</div>
+          <h4 style="color:var(--paper)">Game Design</h4>
+          <p style="color:rgba(242,239,231,.7)">Puzzle logic, inventory systems, state management. The dependency chains that drive progression.</p>
+        </div>
+      </div>
+      <div class="ccard" style="background:#15151A;border-color:rgba(255,255,255,.2);color:var(--paper)">
+        <div>
+          <div class="lbl">Discipline 04</div>
+          <h4 style="color:var(--paper)">Audio</h4>
+          <p style="color:rgba(242,239,231,.7)">Music composition, adaptive scoring, voice acting. Six distinct voices across 78 lines in v1.</p>
+        </div>
+      </div>
+      <div class="ccard" style="background:#15151A;border-color:rgba(255,255,255,.2);color:var(--paper)">
+        <div>
+          <div class="lbl">Discipline 05</div>
+          <h4 style="color:var(--paper)">Engineering</h4>
+          <p style="color:rgba(242,239,231,.7)">Rendering, input handling, scene management. Deployed as a publicly accessible web application.</p>
+        </div>
+      </div>
+      <div class="ccard" style="background:var(--accent);border-color:var(--accent);color:var(--paper)">
+        <div>
+          <div class="lbl" style="color:var(--paper)">Discipline 06</div>
+          <h4 style="color:var(--paper)">Coherence</h4>
+          <p style="color:rgba(255,255,255,.85)">Every element must feel like it belongs to the same game world. This is the test of depth, not breadth.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== Methodology ============== -->
+<section id="methodology">
+  <div class="section-num">§ 05 · Methodology</div>
+  <h2>The protocol, for every generation.</h2>
+
+  <p style="max-width:72ch">To maintain consistency across time, the following protocol will be observed for each generation:</p>
+
+  <ol class="method">
+    <li>The same creative brief will be used, verbatim. No modifications, no added context, no hints from prior generations.</li>
+    <li>The game will be produced using a generally available AI system at the time, in a single conversational session.</li>
+    <li>No pre-written code, assets, templates, or reference material will be supplied. The system starts from the prompt alone.</li>
+    <li>The output will be deployed as a publicly accessible web application.</li>
+    <li>Each generation will be preserved in its original form alongside this document, creating a longitudinal record.</li>
+    <li>Evaluation will be qualitative and structured, tracking progress across the dimensions listed in the scorecard above.</li>
+  </ol>
+
+  <p style="margin-top:32px;color:var(--muted)">This isn't intended to be a rigorous scientific instrument. It's a structured observation framework. The value isn't in any individual score but in the delta between generations.</p>
+</section>
+
+<!-- ============== Looking Forward ============== -->
+<section id="forward" style="background:var(--paper-2);max-width:none;padding:88px 0 96px">
+  <div style="max-width:var(--maxw);margin:0 auto;padding:0 32px">
+    <div class="section-num">§ 06 · Closing</div>
+    <h2>Breadth, then depth.</h2>
+
+    <p style="font-size:19px;max-width:72ch">The original Secret of Monkey Island endures not because of its pixel art or its MIDI soundtrack but because every element serves a unified creative vision. The puzzles reinforce the narrative. The humour emerges from the mechanics, not just the dialogue. The interface disappears into the experience. This is what Gilbert meant when he argued that a game should make the player forget they're solving puzzles and simply feel immersed in a world.</p>
+
+    <p>Whether a generative AI can achieve that kind of holistic creative integration, not just produce all the individual parts but make them cohere, is the real question this experiment tracks. The first generation demonstrates breadth. The question for subsequent generations is depth. Can the puzzle design develop the layered elegance of the original? Can the script sustain comedic rhythm across an entire playthrough? Can the music respond dynamically to player behaviour in the tradition of iMUSE (Monkey Island 2)? Can the game feel like it was designed, not just generated?</p>
+
+    <div class="pullquote">In 1990, it took a team of dedicated professionals nine months and a custom engine refined across four prior titles to produce a game that would go on to be named among the greatest ever made. In 2026, a generative AI produced a fully voice-acted, playable, self-aware spiritual successor in a single session.</div>
+
+    <p>The gap between the two is vast. How far it narrows is what we'll find out. This document will grow with each new AI generation, with a new section recording its capabilities, its limitations, and the distance that remains. Monkey AIsland is, in that sense, both a game and a measuring stick: built in tribute to one of the most important games ever made, and rebuilt periodically by GenAI to track the progress of the machines that are learning to make them.</p>
+  </div>
+</section>
+
+<!-- ============== Footer ============== -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <h5>Monkey AIsland</h5>
+      <p>A longitudinal benchmark measuring generative AI capability in the domain of game creation, anchored to a fixed creative brief and one of the most compositionally demanding games ever made.</p>
+      <div style="margin-top:24px"><a class="pill" style="color:var(--paper);border-color:var(--paper)" href="https://github.com/jamieskella/monkeyaisland.github.io">View on GitHub</a></div>
+    </div>
+    <div class="col">
+      <h6>Generations</h6>
+      <ul>
+        <li><a href="#generations">v1 · March 2026, Claude Sonnet 4.0</a></li>
+        <li><a href="./v1-2026/index.html">Play v1</a></li>
+        <li><a href="./v1-2026/walkthrough.md">Walkthrough</a></li>
+        <li><a href="./v1-2026/progress.md">Progress notes</a></li>
+      </ul>
+    </div>
+    <div class="col">
+      <h6>Author</h6>
+      <ul>
+        <li><a href="https://www.linkedin.com/in/jamieskella/">Jamie Skella</a></li>
+        <li><a href="https://skella.com.au">skella.com.au</a></li>
+        <li><a href="https://github.com/jamieskella">github.com/jamieskella</a></li>
+        <li>Adelaide, Australia</li>
+      </ul>
+    </div>
+  </div>
+  <div class="colophon">
+    <span>© 2026 Jamie Skella · CC BY 4.0</span>
+    <span><a href="https://skella.com.au">A Skella &amp; Co Project</a></span>
+  </div>
+</footer>
+
+<script>
+  // Generations tab switcher
+  (function(){
+    var tabs = document.querySelectorAll('.gens-tabs button[role="tab"]');
+    var panels = document.querySelectorAll('.gens-panel[role="tabpanel"]');
+    function select(id){
+      tabs.forEach(function(t){ t.setAttribute('aria-selected', t.dataset.tab === id ? 'true' : 'false'); });
+      panels.forEach(function(p){ p.setAttribute('aria-hidden', p.id === 'panel-' + id ? 'false' : 'true'); });
+    }
+    tabs.forEach(function(t){
+      t.addEventListener('click', function(){ select(t.dataset.tab); });
+      t.addEventListener('keydown', function(e){
+        var order = ['v1','v2','v3','v4'];
+        var i = order.indexOf(t.dataset.tab);
+        if(e.key === 'ArrowRight'){ e.preventDefault(); var n = order[(i+1)%order.length]; document.getElementById('tab-'+n).focus(); select(n); }
+        if(e.key === 'ArrowLeft'){ e.preventDefault(); var p = order[(i-1+order.length)%order.length]; document.getElementById('tab-'+p).focus(); select(p); }
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>
