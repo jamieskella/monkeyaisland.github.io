@@ -1,1 +1,4 @@
 title: ""
+# Disable Jekyll's default exclude of dotfile directories so /.well-known/ ships
+include:
+  - .well-known
