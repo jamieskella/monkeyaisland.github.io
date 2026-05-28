@@ -1,0 +1,19 @@
+{
+  "product": "Monkey AIsland",
+  "url": "https://monkeyaisland.com",
+  "generated_at": "2026-05-29T00:00:00Z",
+  "artefacts": [
+    { "path": "/robots.txt", "content_type": "text/plain", "category": "robots" },
+    { "path": "/sitemap.xml", "content_type": "application/xml", "category": "sitemap" },
+    { "path": "/llms.txt", "content_type": "text/plain", "category": "llms" },
+    { "path": "/llms-full.txt", "content_type": "text/plain", "category": "llms" },
+    { "path": "/.well-known/security.txt", "content_type": "text/plain", "category": "well-known" },
+    { "path": "/.well-known/tdmrep.json", "content_type": "application/json", "category": "well-known" },
+    { "path": "/.well-known/gpc.json", "content_type": "application/json", "category": "well-known" },
+    { "path": "/humans.txt", "content_type": "text/plain", "category": "identity" },
+    { "path": "/og-default.png", "content_type": "image/png", "category": "og-card" },
+    { "path": "/favicon.ico", "content_type": "image/x-icon", "category": "icon" },
+    { "path": "/favicon.svg", "content_type": "image/svg+xml", "category": "icon" },
+    { "path": "/apple-touch-icon.png", "content_type": "image/png", "category": "icon" }
+  ]
+}

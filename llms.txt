@@ -1,0 +1,24 @@
+# Monkey AIsland
+
+> A repeatable benchmark measuring the capability of generative AI systems in the domain of game creation, anchored to a fixed creative brief: recreate The Secret of Monkey Island (1990). Authored by Jamie Skella.
+
+Monkey AIsland is a longitudinal study. Each generation re-runs the same brief against the current frontier of generative tools and scores the result across a fixed rubric (visual fidelity, audio fidelity, narrative cohesion, code quality, gameplay loop, scope realised, time to first playable, total cost). Version 1 ran in March 2026; subsequent generations follow as the underlying tools advance.
+
+## Project
+
+- [Homepage](https://monkeyaisland.com/): Project overview, methodology, current generation scorecard, and roadmap.
+- [Version 1, March 2026](https://monkeyaisland.com/v1-2026/): Playable build, walkthrough, and progress notes from the first generation.
+- [Gameplay video](https://www.youtube.com/watch?v=Sbsg-N7dzOI): Short capture of the v1 playable.
+
+## Author
+
+- [Jamie Skella on LinkedIn](https://www.linkedin.com/in/jamieskella/): Project author, designer, and full-stack builder.
+- [Skella & Co](https://skella.com.au): Parent studio.
+
+## Discovery
+
+- [llms-full.txt](https://monkeyaisland.com/llms-full.txt): Full benchmark methodology, dimension definitions, and v1 results in long form.
+- [Sitemap](https://monkeyaisland.com/sitemap.xml): Canonical URL inventory.
+- [Robots policy](https://monkeyaisland.com/robots.txt): Crawler permissions, AI assistant explicitly welcome.
+- [Security contact](https://monkeyaisland.com/.well-known/security.txt): How to report a security concern.
+- [Discovery manifest](https://monkeyaisland.com/discovery-manifest.json): Machine-readable index of every artefact this site publishes.

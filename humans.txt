@@ -1,0 +1,15 @@
+/* TEAM */
+Author: Jamie Skella
+Site: https://skella.com.au
+LinkedIn: https://www.linkedin.com/in/jamieskella/
+Location: Adelaide, South Australia
+
+/* THANKS */
+Ron Gilbert, Tim Schafer, Dave Grossman, Steve Purcell, Mark Ferrari, and the LucasArts team behind The Secret of Monkey Island (1990).
+
+/* SITE */
+Last update: 2026/05/29
+Language: English
+Standards: HTML5, CSS3
+Components: Fraunces, Inter, JetBrains Mono
+Software: Hand-authored, served from GitHub Pages
